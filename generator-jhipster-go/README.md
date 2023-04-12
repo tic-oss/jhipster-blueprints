@@ -30,7 +30,7 @@
 
    + Now this will generate a set of prompts and based on the answers given the code will be generated.
     
-    + Second using jdl
+     + Second using jdl
 
       + Say reminder.jdl
 
