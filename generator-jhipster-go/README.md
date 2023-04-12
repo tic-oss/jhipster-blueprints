@@ -32,7 +32,7 @@
     
      + Second using jdl
 
-      + Say reminder.jdl
+       + Say reminder.jdl
 
          ---
              application {
