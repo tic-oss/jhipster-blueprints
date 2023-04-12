@@ -17,7 +17,7 @@
   ---
       npm link generator-jhipster-go
   ---
-  - Now create a new file say my-app and shift to this directory
+  - Now create a new directory say my-app and shift to this directory
   ---
       mkdir my-app && cd my-app
   ---
