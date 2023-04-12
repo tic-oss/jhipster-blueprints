@@ -1,0 +1,34 @@
+{
+  "generator-jhipster": {
+    "additionalSubGenerators": "",
+    "baseName": "go",
+    "cli": false,
+    "generators": {
+      "server": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "default",
+          "writing",
+          "postWriting",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      }
+    },
+    "jhipsterVersion": "7.9.3",
+    "localBlueprint": false,
+    "prettierDefaultIndent": "2",
+    "projectName": "Go Application",
+    "skipCommitHook": true,
+    "subGenerators": ["server"]
+  }
+}
