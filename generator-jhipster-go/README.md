@@ -51,11 +51,11 @@
               }
         ---
 
-      + Now by using the command we can generate the files 
+        + Now by using the command we can generate the files 
 
-      ---
-          jhipster jdl reminder.jdl
-      ---
+        ---
+            jhipster jdl reminder.jdl
+        ---
  ## To run the golang application generated
   + First run the postgress,keycloak and jhipster registry files.
   ---
