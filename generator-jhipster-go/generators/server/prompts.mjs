@@ -153,37 +153,9 @@ export async function askForServerSideOpts() {
   if (!this.options.askAnswered){
     this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
     this.packageName=this.jhipsterConfigWithDefaults.packageName;
+    this.baseName=this.jhipsterConfigWithDefaults.baseName
     return ;
   }
-/* answers structure   
-   {
-      serverPort: '8080',
-      packageName: 'tic',
-      serviceDiscoveryType: 'eureka',
-      authenticationType: 'oauth2',
-      databaseType: 'sql',
-      prodDatabaseType: 'postgresql',
-      devDatabaseType: 'postgresql'
-    }
-*/
-    
-  // const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
-
-  //   const prompts = [
-  //       {
-  //         type: "string",
-  //         name: "yourName",
-  //         message: "What is the your name?",
-  //         default: "tic"
-  //       }
-  //     ]
-  //     return this.prompt(prompts).then(answers => {
-  //       this.yourName = answers.yourName;
-  //       // this.description = answers.description;
-  //       // this.serverPort = answers.serverPort;
-  //     });
-  //   // await this.prompt(prompts, this.config);
-
 
     const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
   const prompts = [
@@ -326,9 +298,9 @@ export async function askForServerSideOpts() {
     },];
 
     return this.prompt(prompts).then(answers=>{
-      console.log(answers);
       this.serverPort=answers.serverPort;
       this.packageName=answers.packageName;
+      this.baseName=this.jhipsterConfigWithDefaults.baseName
   /* answers structure   
      {
         serverPort: '8080',
