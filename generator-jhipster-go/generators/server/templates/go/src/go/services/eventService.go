@@ -6,11 +6,12 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
-	"<%= packageName %>/src/domains"
-	"<%= packageName %>/src/errors"
-	"<%= packageName %>/src/repositories"
-	"<%= packageName %>/src/customlogger"
+	"<%= packageName %>/domains"
+	"<%= packageName %>/errors"
+	"<%= packageName %>/repositories"
+	"<%= packageName %>/customlogger"
 	"strconv"
+	"log"
 )
 
 // Event represents the model for an event
@@ -98,20 +99,34 @@ func GetOneEvent(w http.ResponseWriter, r *http.Request) {
 // @Tags events
 // @Accept  json
 // @Produce  json
-// @Param event body Event true "Update event"
-// @Success 200 {object} Event
-// @Router /update [post]
+// @Param body {object} true "Update event"
+// @Param id header int true "Update event"
+// @Router /update [patch]
 func UpdateEvent(w http.ResponseWriter, r *http.Request){
-	var newEvent domains.Event
-	reqBody, err := ioutil.ReadAll(r.Body)
+	params := mux.Vars(r)
+	idStr := params[ "id"]
 	logger := customlogger.GetInstance()
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		w.WriteHeader(400)
+		json.NewEncoder(w).Encode(
+			errors.BadRequestError("Id must be an integer"))
+		logger.ErrorLogger.Println(errors.BadRequestError("Id must be an integer"))
+		return
+	}
+	// var newEvent domains.Event
+	var unknownMap map[string]interface{}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	// logger = customlogger.GetInstance()
 	if err != nil {
 		fmt.Fprintf(w, "Kindly enter data with the event title and description only in order to update")
 	}
-
-	json.Unmarshal(reqBody, &newEvent)
+	err = json.Unmarshal([]byte(reqBody), &unknownMap)
+	if err != nil {
+		log.Fatal(err)
+	}
     
-	ev, httpErr := repositories.UpdateEvents(&newEvent)
+	httpErr := repositories.UpdateEvents(&unknownMap,id)
 	
 	if httpErr != nil {
 		w.WriteHeader(httpErr.Code)
@@ -121,8 +136,8 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request){
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	logger.InfoLogger.Println("Event updated with Id:"+strconv.Itoa(newEvent.ID))
-	json.NewEncoder(w).Encode(&ev)
+	logger.InfoLogger.Println("Event updated with Id:"+idStr)
+	// json.NewEncoder(w).Encode(&ev)
 }
 
 // DeleteEvent godoc
@@ -132,8 +147,7 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request){
 // @Accept  json
 // @Produce  json
 // @Param id header int true "Delete event"
-// @Success 200 {object} Event
-// @Router /delete/{id} [get]
+// @Router /delete/{id} [delete]
 func DeleteEvent(w http.ResponseWriter,r *http.Request){
 	params := mux.Vars(r)
 	idStr := params[ "id"]

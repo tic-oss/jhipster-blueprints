@@ -3,8 +3,8 @@ package config
 import (   
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"   
-	"<%= packageName %>/src/domains"
-	"<%= packageName %>/src/customlogger"
+	"<%= packageName %>/domains"
+	"<%= packageName %>/customlogger"
 	ft "<%= packageName %>/fileutil"
 )
 	

@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	"<%= packageName %>/src/helper"
+	"<%= packageName %>/helper"
 	"time"
 	// "fmt"
-	// "github.com/carlescere/scheduler"
-	// "runtime"
+	"github.com/carlescere/scheduler"
+	"runtime"
 	"github.com/google/uuid"
 	"os"
 	ft "<%= packageName %>/fileutil"
@@ -80,21 +80,21 @@ func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs R
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"msg1", bodyUP, nil)
 }
 
-// func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-// 	log.Println("In SendHeartBeat!")
-// 	hostname, err := os.Hostname()
-// 	if err != nil{
-// 		log.Print("Error while getting hostname which shall be used as APP ID")
-// 	}
-// 	job := func() {
-// 		fmt.Println("sending heartbeat : ", time.Now().UTC())
-// 		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+"msg1/"+hostname, nil, nil)
-// 	}
-// 	// Run every 25 seconds but not now.
-// 	scheduler.Every(25).Seconds().Run(job)
-// 	runtime.Goexit()
+func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
+	log.Println("In SendHeartBeat!")
+	hostname, err := os.Hostname()
+	if err != nil{
+		log.Print("Error while getting hostname which shall be used as APP ID")
+	}
+	job := func() {
+		fmt.Println("sending heartbeat : ", time.Now().UTC())
+		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+"msg1/"+hostname, nil, nil)
+	}
+	// Run every 25 seconds but not now.
+	scheduler.Every(25).Seconds().Run(job)
+	runtime.Goexit()
 
-// }
+}
 func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs RegistrationVariables) {
 	helper.MakePostCall(configs.ServiceRegistryURL(), nil, nil)
 }

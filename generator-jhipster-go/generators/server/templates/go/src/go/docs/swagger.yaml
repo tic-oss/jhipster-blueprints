@@ -23,7 +23,7 @@ info:
   version: "1.0"
 paths:
   /delete/{id}:
-    get:
+    delete:
       consumes:
       - application/json
       description: Delete the event by id
@@ -35,11 +35,7 @@ paths:
         type: integer
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/services.Event'
+      responses: {}
       summary: Delete an event By Id
       tags:
       - events
@@ -104,7 +100,7 @@ paths:
       tags:
       - events
   /update:
-    post:
+    patch:
       consumes:
       - application/json
       description: Updates an event with the input paylod
@@ -115,13 +111,14 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/services.Event'
+      - description: Update event
+        in: header
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/services.Event'
+      responses: {}
       summary: Update an event
       tags:
       - events

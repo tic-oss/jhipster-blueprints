@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	// "context"
-	"<%= packageName %>/src/errors"
+	"<%= packageName %>/errors"
 	"strings"
 //  "crypto/tls"
 	oidc "github.com/coreos/go-oidc"
@@ -65,7 +65,7 @@ func Protect(next http.Handler) http.Handler {
 	    // token, _ := client.LoginClient(r.Context(), clientId,clientSecret, realm)
         // fmt.Println(token)
 		accessToken := strings.Split(authHeader, " ")[1]
-		fmt.Println(accessToken);
+		// fmt.Println(accessToken);
 		
 		_,err = verifier.Verify(r.Context(), accessToken)
 
@@ -133,7 +133,7 @@ func Redirect(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Failed to verify ID Token: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(rawIDToken)
+	// fmt.Println(rawIDToken)
 	resp := struct {
 		OAuth2Token   *oauth2.Token
 		IDTokenClaims *json.RawMessage // ID Token payload is just JSON.

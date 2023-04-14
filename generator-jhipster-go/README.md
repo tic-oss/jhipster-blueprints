@@ -56,6 +56,12 @@
           jhipster jdl reminder.jdl
       ---
  ## To run the golang application generated
+
+  + Build the go application 
+  ---
+      cd go
+      go mod tidy
+  ---
   + First run the postgress,keycloak and jhipster registry files.
   ---
       cd docker

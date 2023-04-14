@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	"<%= packageName %>/src/services"
+	"<%= packageName %>/services"
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -21,9 +21,9 @@ func (t EventController) RegisterRoutes(router *mux.Router) {
 	router.Handle("/events", http.HandlerFunc(services.AllEvents)).Methods("GET")
 	router.Handle("/healthcheck", http.HandlerFunc(services.Health)).Methods("GET")
 	//update
-	router.Handle("/update",http.HandlerFunc(services.UpdateEvent)).Methods("POST")
+	router.Handle("/update/{id}",http.HandlerFunc(services.UpdateEvent)).Methods("PATCH")
 	//delete
-	router.Handle("/delete/{id}",http.HandlerFunc(services.DeleteEvent)).Methods("GET")
+	router.Handle("/delete/{id}",http.HandlerFunc(services.DeleteEvent)).Methods("DELETE")
 	// Swagger
 	router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }

@@ -25,7 +25,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/delete/{id}": {
-            "get": {
+            "delete": {
                 "description": "Delete the event by id",
                 "consumes": [
                     "application/json"
@@ -46,14 +46,7 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/services.Event"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/event": {
@@ -149,7 +142,7 @@ const docTemplate = `{
             }
         },
         "/update": {
-            "post": {
+            "patch": {
                 "description": "Updates an event with the input paylod",
                 "consumes": [
                     "application/json"
@@ -170,16 +163,16 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/services.Event"
                         }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Update event",
+                        "name": "id",
+                        "in": "header",
+                        "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/services.Event"
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },

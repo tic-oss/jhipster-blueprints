@@ -1,8 +1,8 @@
 package repositories
 import (   
-	"<%= packageName %>/src/db"   
-	"<%= packageName %>/src/domains"   
-	"<%= packageName %>/src/errors"
+	"<%= packageName %>/db"   
+	"<%= packageName %>/domains"   
+	"<%= packageName %>/errors"
 	// "errors"
 	)
 
@@ -22,14 +22,23 @@ import (
     }
 
  
-	func UpdateEvents (event *domains.Event) (*domains.Event, *errors.HttpError){
-	var updateEvent domains.Event
-	result := config.Database.Model(&updateEvent).Where("id = ?", event.ID).Updates(event)
-	if result.RowsAffected == 0 {
-        return &updateEvent, errors.DataAccessLayerError("error")
-    }
-    return &updateEvent, nil
-    }
+	func UpdateEvents (updates *map[string]interface{},id int) (*errors.HttpError){
+		var updateEvent domains.Event
+		if err := config.Database.First(&updateEvent, id).Error; err != nil {
+			return errors.DataAccessLayerError("No field with the given id")
+		}
+	
+		if err := config.Database.Model(&updateEvent).Updates(updates).Error; err != nil {
+			return errors.DataAccessLayerError("Reverify the entities and try again")
+		}
+	
+		return nil
+		// result := config.Database.Model(&updateEvent).Where("id = ?", event.ID).Updates(event)
+		// if result.RowsAffected == 0 {
+			// return &updateEvent, errors.DataAccessLayerError("error")
+		// }
+		// return &updateEvent, nil
+		}
 
 	func DeleteEventById(id int) (int64, *errors.HttpError){
 	var deletedEvent domains.Event

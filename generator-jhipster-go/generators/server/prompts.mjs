@@ -148,13 +148,20 @@ const getOptionFromArray = (array, option) => {
 };
 
 export async function askForServerSideOpts() {
-  // console.log(this.jhipsterConfigWithDefaults);
-  // if (!this.options.askAnswered) return;
-  if (!this.options.askAnswered){
-    this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
-    this.packageName=this.jhipsterConfigWithDefaults.packageName;
+  //console.log(this);
+  if (this.options.fromJdl){ 
+      this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
+      this.packageName=this.jhipsterConfigWithDefaults.packageName;
+      this.baseName=this.jhipsterConfigWithDefaults.baseName;
     return ;
   }
+  // if (!this.options.askAnswered) return;
+  // if (!this.options.askAnswered){
+  //   this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
+  //   this.packageName=this.jhipsterConfigWithDefaults.packageName;
+  //   this.baseName=this.jhipsterConfigWithDefaults.baseName;
+  //   return ;
+  // }
 /* answers structure   
    {
       serverPort: '8080',
@@ -329,6 +336,7 @@ export async function askForServerSideOpts() {
       console.log(answers);
       this.serverPort=answers.serverPort;
       this.packageName=answers.packageName;
+      this.baseName=this.jhipsterConfig.baseName;
   /* answers structure   
      {
         serverPort: '8080',

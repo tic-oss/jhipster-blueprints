@@ -48,6 +48,8 @@ export default class extends ServerGenerator {
             `${chalk.red('golang-blueprint')}`
           )
         );
+
+        //this.log("this.options: " + this.options);
         
       },
 
@@ -104,7 +106,7 @@ export default class extends ServerGenerator {
         writing() {
           this.fs.copyTpl(
             this.templatePath("go"),
-            this.destinationPath("go"),{
+            this.destinationPath(this.baseName),{
               serverPort:this.serverPort,
               packageName:this.packageName
             }
