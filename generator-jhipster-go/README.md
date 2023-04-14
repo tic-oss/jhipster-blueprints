@@ -13,13 +13,13 @@
   --- 
       cd generator-jhipster-go
   ---
-  - Now link the development version og jhipster to this blueprint
+  - Now link the development version of jhipster to this blueprint
   ---
-   npm link generator-jhipster-go
+      npm link generator-jhipster-go
   ---
   - Now create a new file say my-app and shift to this directory
   ---
-    mkdir my-app && cd my-app
+       mkdir my-app && cd my-app
   ---
   - Now there are two ways of generating the code:
     + First using prompts
