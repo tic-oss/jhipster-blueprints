@@ -148,6 +148,7 @@ const getOptionFromArray = (array, option) => {
 };
 
 export async function askForServerSideOpts() {
+<<<<<<< HEAD
   //console.log(this);
   if (this.options.fromJdl){ 
       this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
@@ -191,6 +192,16 @@ export async function askForServerSideOpts() {
   //     });
   //   // await this.prompt(prompts, this.config);
 
+=======
+  // console.log(this.jhipsterConfigWithDefaults);
+  // if (!this.options.askAnswered) return;
+  if (!this.options.askAnswered){
+    this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
+    this.packageName=this.jhipsterConfigWithDefaults.packageName;
+    this.baseName=this.jhipsterConfigWithDefaults.baseName
+    return ;
+  }
+>>>>>>> c61a02c5c30e40001d394063b0a0d61069d7d530
 
     const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
   const prompts = [
@@ -333,10 +344,13 @@ export async function askForServerSideOpts() {
     },];
 
     return this.prompt(prompts).then(answers=>{
-      console.log(answers);
       this.serverPort=answers.serverPort;
       this.packageName=answers.packageName;
+<<<<<<< HEAD
       this.baseName=this.jhipsterConfig.baseName;
+=======
+      this.baseName=this.jhipsterConfigWithDefaults.baseName
+>>>>>>> c61a02c5c30e40001d394063b0a0d61069d7d530
   /* answers structure   
      {
         serverPort: '8080',

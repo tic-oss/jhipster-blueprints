@@ -17,9 +17,9 @@
   ---
       npm link generator-jhipster-go
   ---
-  - Now create a new file say my-app and shift to this directory
+  - Now create a new directory say my-app and shift to this directory
   ---
-       mkdir my-app && cd my-app
+    mkdir my-app && cd my-app
   ---
   - Now there are two ways of generating the code:
     + First using prompts
@@ -29,9 +29,10 @@
      ---  
 
    + Now this will generate a set of prompts and based on the answers given the code will be generated.
-    + Second using jdl
+    
+     + Second using jdl
 
-      + Say reminder.jdl
+       + Say reminder.jdl
 
          ---
              application {
@@ -50,11 +51,11 @@
               }
         ---
 
-      + Now by using the command we can generate the files 
+        + Now by using the command we can generate the files 
 
-      ---
-          jhipster jdl reminder.jdl
-      ---
+        ---
+            jhipster jdl reminder.jdl
+        ---
  ## To run the golang application generated
 
   + Build the go application 
