@@ -106,7 +106,7 @@ export default class extends ServerGenerator {
         writing() {
           this.fs.copyTpl(
             this.templatePath("go"),
-            this.destinationPath(this.baseName),{
+            this.destinationPath(),{
               serverPort:this.serverPort,
               packageName:this.packageName
             }
