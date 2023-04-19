@@ -176,7 +176,7 @@ func Login(w http.ResponseWriter, r *http.Request){
 	}
 
 	rawAccessToken := r.Header.Get("Authorization")
-	fmt.Print(rawAccessToken)
+	// fmt.Print(rawAccessToken)
         if rawAccessToken == "" {
             http.Redirect(w, r, oauth2Config.AuthCodeURL(state), http.StatusFound)
             return
