@@ -48,11 +48,7 @@ export default class extends ServerGenerator {
             `${chalk.red('golang-blueprint')}`
           )
         );
-
-        //this.log("this.options: " + this.options);
-        
       },
-
       askForServerSideOpts
     };
   }

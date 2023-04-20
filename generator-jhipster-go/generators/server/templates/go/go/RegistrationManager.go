@@ -3,7 +3,7 @@ package main
 type RegistrationManager interface {
 	ManageDiscovery(configs RegistrationVariables)
 	RegisterWithSerivceRegistry()
-	// SendHeartBeat(configs RegistrationVariables)
+	SendHeartBeat(configs RegistrationVariables)
 	DeRegisterFromServiceRegistry(configs RegistrationVariables)
 }
 

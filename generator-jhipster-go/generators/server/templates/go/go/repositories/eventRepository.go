@@ -3,7 +3,6 @@ import (
 	"<%= packageName %>/db"   
 	"<%= packageName %>/domains"   
 	"<%= packageName %>/errors"
-	// "errors"
 	)
 
 	func SaveEvent(event *domains.Event) (*domains.Event, *errors.HttpError){   
@@ -33,11 +32,6 @@ import (
 		}
 	
 		return nil
-		// result := config.Database.Model(&updateEvent).Where("id = ?", event.ID).Updates(event)
-		// if result.RowsAffected == 0 {
-			// return &updateEvent, errors.DataAccessLayerError("error")
-		// }
-		// return &updateEvent, nil
 		}
 
 	func DeleteEventById(id int) (int64, *errors.HttpError){

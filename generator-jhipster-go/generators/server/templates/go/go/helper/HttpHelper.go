@@ -2,10 +2,11 @@ package helper
 
 import (
 	"net/http"
-	"log"
+	"fmt"
 	"encoding/json"
 	"bytes"
 	"time"
+	"<%= packageName %>/customlogger"
 	"errors"
 )
 
@@ -14,7 +15,8 @@ type OperationBody interface {
 
 //MakePostCall
 func MakePostCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
-	log.Printf("In MakePostCall to %s with body %s",urlToPost,body)
+	msg :=fmt.Sprintf("In MakePostCall to %s with body %s",urlToPost,body)
+    customlogger.Printfun("info",msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    30 * time.Second,
@@ -22,18 +24,15 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
 	}
 	var buffer bytes.Buffer
 	encoder := json.NewEncoder(&buffer)
-	//encoder.SetIndent(" ", "\t")
 	err := encoder.Encode(body)
 	if err != nil {
-		log.Print("error while encoding "+err.Error())
+		customlogger.Printfun("error","error while encoding "+err.Error())
 	}
-
-	log.Printf("Request body  %+v",buffer.String())
-
+    msg=fmt.Sprintf("Request body  %+v",buffer.String())
 	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest(http.MethodPost, urlToPost, &buffer)
 	if err != nil {
-		log.Print("Error while creating the http request  " + err.Error())
+		customlogger.Printfun("error","Error while creating the http request  "+err.Error())
 		return errors.New("Error while creating http request  " + err.Error()), nil
 	}
 
@@ -44,17 +43,17 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Print("Error while making post call " + err.Error())
+		customlogger.Printfun("error","Error while making post call " +err.Error())
 		return errors.New("Error while making post call " + err.Error()), nil
 	}
-	log.Print("Successfull POST call with HTTP Status : " + resp.Status)
-
+	customlogger.Printfun("info","Successfull POST call with HTTP Status : " + resp.Status)    
 	return nil, resp
 }
 
 
 func MakePutCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
-	log.Printf("In MakePostCall to %s with body %s",urlToPost,body)
+    msg :=fmt.Sprintf("In MakePostCall to %s with body %s",urlToPost,body);
+	customlogger.Printfun("info",msg)    
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    30 * time.Second,
@@ -67,15 +66,16 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 		//encoder.SetIndent(" ", "\t")
 		err := encoder.Encode(body)
 		if err != nil {
-			log.Print("error while encoding "+err.Error())
+			customlogger.Printfun("error","error while encoding "+err.Error())    
 		}
-		log.Printf("Prepared Request body  %+v",buffer.String())
+		msg = fmt.Sprintf("Prepared Request body  %+v",buffer.String())
+		customlogger.Printfun("info",msg)    
 	}
 
 	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest(http.MethodPut, urlToPost, &buffer)
 	if err != nil {
-		log.Print("Error while creating the http request  " + err.Error())
+		customlogger.Printfun("error","Error while creating the http request  " + err.Error())    
 		return errors.New("Error while creating http request " + err.Error()), nil
 	}
 
@@ -86,10 +86,9 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Print("Error while making PUT call " + err.Error())
+		customlogger.Printfun("error","Error while making PUT call " + err.Error())    
 		return errors.New("Error while making PUT call " + err.Error()), nil
 	}
-	log.Print("Successfull POST call with HTTP Status : " + resp.Status)
-
+	customlogger.Printfun("info","Error while making PUT call " + "Successfull POST call with HTTP Status : " + resp.Status)    
 	return nil, resp
 }

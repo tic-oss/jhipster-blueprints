@@ -1,11 +1,6 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 
-// import {applicationTypes} from './types/application-types.js';
-// import {databaseTypes} from './types/database-types.js';
-// import {authenticationTypes} from './types/authentication-types.js';
-// import {serviceDiscoveryTypes} from './types/service-discovery-types.js';
-
 const APPLICATION_TYPE_MONOLITH = 'monolith';
 const APPLICATION_TYPE_MICROSERVICE = 'microservice';
 const APPLICATION_TYPE_GATEWAY = 'gateway';
@@ -59,7 +54,7 @@ const databaseTypes = {
 databaseTypes.isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
 
 
-// import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
+
 const R2DBC_DB_OPTIONS = [
   {
     value: databaseTypes.POSTGRESQL,
@@ -105,7 +100,6 @@ const SQL_DB_OPTIONS = [
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-// const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
 const { CONSUL, EUREKA,NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 
 const OptionNames = {
@@ -148,49 +142,12 @@ const getOptionFromArray = (array, option) => {
 };
 
 export async function askForServerSideOpts() {
-  //console.log(this);
   if (this.options.fromJdl){ 
       this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
       this.packageName=this.jhipsterConfigWithDefaults.packageName;
       this.baseName=this.jhipsterConfigWithDefaults.baseName;
     return ;
   }
-  // if (!this.options.askAnswered) return;
-  // if (!this.options.askAnswered){
-  //   this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
-  //   this.packageName=this.jhipsterConfigWithDefaults.packageName;
-  //   this.baseName=this.jhipsterConfigWithDefaults.baseName;
-  //   return ;
-  // }
-/* answers structure   
-   {
-      serverPort: '8080',
-      packageName: 'tic',
-      serviceDiscoveryType: 'eureka',
-      authenticationType: 'oauth2',
-      databaseType: 'sql',
-      prodDatabaseType: 'postgresql',
-      devDatabaseType: 'postgresql'
-    }
-*/
-    
-  // const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
-
-  //   const prompts = [
-  //       {
-  //         type: "string",
-  //         name: "yourName",
-  //         message: "What is the your name?",
-  //         default: "tic"
-  //       }
-  //     ]
-  //     return this.prompt(prompts).then(answers => {
-  //       this.yourName = answers.yourName;
-  //       // this.description = answers.description;
-  //       // this.serverPort = answers.serverPort;
-  //     });
-  //   // await this.prompt(prompts, this.config);
-
 
     const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
   const prompts = [

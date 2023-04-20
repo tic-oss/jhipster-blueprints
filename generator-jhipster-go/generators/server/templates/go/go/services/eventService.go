@@ -38,8 +38,8 @@ func Health(w http.ResponseWriter, r *http.Request){
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
 	var newEvent domains.Event
 	reqBody, err := ioutil.ReadAll(r.Body)
-	logger := customlogger.GetInstance()
 	if err != nil {
+		customlogger.Printfun("error","Kindly enter data with the event title and description only in order to update")    
 		fmt.Fprintf(w, "Kindly enter data with the event title and description only in order to update")
 	}
 
@@ -49,12 +49,12 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 	if httpErr != nil {
 		w.WriteHeader(httpErr.Code)
 		json.NewEncoder(w).Encode(errors.UnauthorizedError())
-		logger.ErrorLogger.Println(errors.UnauthorizedError())
+		customlogger.Printfun("error","Unauthorized Error")
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	logger.InfoLogger.Println("Event created with Id:"+strconv.Itoa(newEvent.ID))
+	customlogger.Printfun("info","Event created with Id:"+strconv.Itoa(newEvent.ID))    
 	json.NewEncoder(w).Encode(&ev)
 }
 
@@ -70,13 +70,12 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 func GetOneEvent(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	idStr := params[ "id"]
-	logger := customlogger.GetInstance()
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		w.WriteHeader(400)
 		json.NewEncoder(w).Encode(
 			errors.BadRequestError("Id must be an integer"))
-		logger.ErrorLogger.Println(errors.BadRequestError("Id must be an integer"))
+			customlogger.Printfun("error","Id must be an integer")    
 		return
 	}
 
@@ -85,11 +84,10 @@ func GetOneEvent(w http.ResponseWriter, r *http.Request) {
 	if event == nil {
 		w.WriteHeader(404)
 		json.NewEncoder(w).Encode(errors.NotFoundError())
-		logger.ErrorLogger.Println(errors.NotFoundError())
-
+		customlogger.Printfun("error","Event Not found")    
 		return
 	}
-    logger.InfoLogger.Println("Fetched event with Id="+idStr)
+	customlogger.Printfun("info","Fetched event with Id="+idStr)    
 	json.NewEncoder(w).Encode(&event)
 }
 
@@ -105,21 +103,19 @@ func GetOneEvent(w http.ResponseWriter, r *http.Request) {
 func UpdateEvent(w http.ResponseWriter, r *http.Request){
 	params := mux.Vars(r)
 	idStr := params[ "id"]
-	logger := customlogger.GetInstance()
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		w.WriteHeader(400)
 		json.NewEncoder(w).Encode(
 			errors.BadRequestError("Id must be an integer"))
-		logger.ErrorLogger.Println(errors.BadRequestError("Id must be an integer"))
+			customlogger.Printfun("error","Id must be an integer")  
 		return
 	}
-	// var newEvent domains.Event
 	var unknownMap map[string]interface{}
 	reqBody, err := ioutil.ReadAll(r.Body)
-	// logger = customlogger.GetInstance()
 	if err != nil {
 		fmt.Fprintf(w, "Kindly enter data with the event title and description only in order to update")
+		customlogger.Printfun("info","Kindly enter data with the event title and description only in order to update")  
 	}
 	err = json.Unmarshal([]byte(reqBody), &unknownMap)
 	if err != nil {
@@ -131,13 +127,12 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request){
 	if httpErr != nil {
 		w.WriteHeader(httpErr.Code)
 		json.NewEncoder(w).Encode(errors.UnauthorizedError())
-		logger.ErrorLogger.Println(errors.UnauthorizedError())
+		customlogger.Printfun("error","Unauthorized Error")  
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	logger.InfoLogger.Println("Event updated with Id:"+idStr)
-	// json.NewEncoder(w).Encode(&ev)
+	customlogger.Printfun("info","Event updated with Id:"+idStr)  
 }
 
 // DeleteEvent godoc
@@ -151,23 +146,22 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request){
 func DeleteEvent(w http.ResponseWriter,r *http.Request){
 	params := mux.Vars(r)
 	idStr := params[ "id"]
-	logger := customlogger.GetInstance()
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		w.WriteHeader(400)
 		json.NewEncoder(w).Encode(
 			errors.BadRequestError("Id must be an integer"))
-		logger.ErrorLogger.Println(errors.BadRequestError("Id must be an integer"))
+			customlogger.Printfun("error","Id must be an integer")  	
 		return
 	}
 	_,errr := repositories.DeleteEventById(id)
   
 	if errr != nil {
 		json.NewEncoder(w).Encode(errr)
-		logger.ErrorLogger.Println(errr)
+		customlogger.Printfun("error",errr.Error)  	
 		return
 	}
-    logger.InfoLogger.Println("Deleted event with Id="+idStr)
+	customlogger.Printfun("info","Deleted event with Id="+idStr)  	
 }
 
 // GetEvents godoc
@@ -179,8 +173,7 @@ func DeleteEvent(w http.ResponseWriter,r *http.Request){
 // @Success 200 {array} Event
 // @Router /events [get]
 func AllEvents(w http.ResponseWriter, r *http.Request) {
-	logger := customlogger.GetInstance()
 	events := repositories.FindAllEvents()
-	logger.InfoLogger.Println("Fetched all events");
+	customlogger.Printfun("info","Fetched all events")	
 	json.NewEncoder(w).Encode(&events)
 }

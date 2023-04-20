@@ -1,14 +1,13 @@
 package main
 
 import (
-	"log"
 	"<%= packageName %>/helper"
 	"time"
-	// "fmt"
 	"github.com/carlescere/scheduler"
 	"runtime"
 	"github.com/google/uuid"
 	"os"
+	"<%= packageName %>/customlogger"
 	ft "<%= packageName %>/fileutil"
 )
 
@@ -69,25 +68,24 @@ type EurekaRegistrationManager struct {
 }
 
 func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs RegistrationVariables) {
-	log.Print("Registering service with status : STARTING")
-	body :=  erm.getBodyForEureka("STARTING")
-    
+	customlogger.Printfun("info","Registering service with status : STARTING")    
+	body :=  erm.getBodyForEureka("STARTING")    
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"msg1", body, nil)
-	log.Print("Waiting for 10 seconds for application to start properly")
+	customlogger.Printfun("info","Waiting for 10 seconds for application to start properly")    	
 	time.Sleep(10 * time.Second)
-	log.Print("Updating the status to : UP")
+	customlogger.Printfun("info","Updating the status to : UP")    	
 	bodyUP :=  erm.getBodyForEureka("UP")
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"msg1", bodyUP, nil)
 }
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-	log.Println("In SendHeartBeat!")
+	customlogger.Printfun("info","In SendHeartBeat!")    	
 	hostname, err := os.Hostname()
 	if err != nil{
-		log.Print("Error while getting hostname which shall be used as APP ID")
+		customlogger.Printfun("error","Error while getting hostname which shall be used as APP ID")    	
 	}
 	job := func() {
-		fmt.Println("sending heartbeat : ", time.Now().UTC())
+		customlogger.Printfun("info","sending heartbeat : "+ time.Now().UTC().String())    	
 		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+"msg1/"+hostname, nil, nil)
 	}
 	// Run every 25 seconds but not now.
@@ -105,12 +103,12 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string) *AppRegistr
 	httpport := props["port"]
 	hostname, err := os.Hostname()
 	if err != nil{
-		log.Print("Enable to find hostname form OS, sending appname as host name")
+		customlogger.Printfun("error","Enable to find hostname form OS, sending appname as host name")    	
 	}
 
 	ipAddress, err := helper.ExternalIP()
 	if err != nil{
-		log.Print("Enable to find IP address form OS")
+		customlogger.Printfun("error","Enable to find IP address form OS")    	
 	}
 
 	port := Port{httpport,"true"}
