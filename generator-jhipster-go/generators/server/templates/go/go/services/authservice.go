@@ -128,9 +128,49 @@ func Login(w http.ResponseWriter, r *http.Request){
 	}
 
 	rawAccessToken := r.Header.Get("Authorization")
+<<<<<<< HEAD:generator-jhipster-go/generators/server/templates/go/go/services/authservice.go
+=======
+	// fmt.Print(rawAccessToken)
+>>>>>>> f579095828fe8f87cb6183dba664fcfda6f2f78e:generator-jhipster-go/generators/server/templates/go/src/go/services/authservice.go
         if rawAccessToken == "" {
             http.Redirect(w, r, oauth2Config.AuthCodeURL(state), http.StatusFound)
             return
         }
 		w.Write([]byte("hello world"))
+<<<<<<< HEAD:generator-jhipster-go/generators/server/templates/go/go/services/authservice.go
 }
+=======
+	// rq := &loginRequest{}
+	// decoder := json.NewDecoder(r.Body)
+	// if err := decoder.Decode(rq); err != nil {
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	return
+	// }
+	// restyClient := client.RestyClient()
+	// restyClient.SetDebug(true)
+	// restyClient.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+	// jwt, err := client.Login(r.Context(),
+	// 	clientId,
+	// 	clientSecret,
+	// 	realm,
+	// 	rq.Username,
+	// 	rq.Password)
+
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusForbidden)
+	// 	return
+	// }
+
+	// rs := &loginResponse{
+	// 	AccessToken:  jwt.AccessToken,
+	// 	RefreshToken: jwt.RefreshToken,
+	// 	ExpiresIn:    jwt.ExpiresIn,
+	// }
+
+	// rsJs, _ := json.Marshal(rs)
+
+	// w.Header().Set("Content-Type", "application/json")
+	// w.WriteHeader(http.StatusOK)
+	// _, _ = w.Write(rsJs)
+}
+>>>>>>> f579095828fe8f87cb6183dba664fcfda6f2f78e:generator-jhipster-go/generators/server/templates/go/src/go/services/authservice.go
