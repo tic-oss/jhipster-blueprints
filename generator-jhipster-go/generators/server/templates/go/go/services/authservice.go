@@ -8,8 +8,16 @@ import (
 	oidc "github.com/coreos/go-oidc"
  "golang.org/x/oauth2"
 	_ "github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+	  log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
+  }
 
 type LoginResponse struct {
 	AccessToken string `json:"access_token"`
@@ -22,7 +30,7 @@ var (
 	realm        = "jhipster"
 	redirectURL = "http://localhost:<%= serverPort %>/redirect"
 	state = "somestate"
-	configURL = "http://localhost:9080/realms/jhipster"
+	configURL = goDotEnvVariable("KEYCLOAK_URL")
 	rawIDToken string
 )
 

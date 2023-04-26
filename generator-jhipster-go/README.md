@@ -84,7 +84,8 @@
 - DB_USER=go
 - DB_NAME=postgres 
 - DB_PORT=5433
-DB_URL=postgresql://go@localhost:5433/postgres
+- KEYCLOAK_URL=http://localhost:9080/realms/jhipster
+- DB_URL=postgresql://go@localhost:5433/postgres
 
 ### Build an image 
    ---
