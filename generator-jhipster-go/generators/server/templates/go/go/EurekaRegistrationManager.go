@@ -8,8 +8,16 @@ import (
 	"github.com/google/uuid"
 	"os"
 	"<%= packageName %>/customlogger"
-	ft "<%= packageName %>/fileutil"
+	"github.com/joho/godotenv"
+
 )
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+	  log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
+  }
 
 /**
 Below is the format required by Eureka to register and application instance
@@ -98,9 +106,9 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 }
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string) *AppRegistrationBody {
-	props, _ := ft.ReadPropertiesFile("config.properties")
+	
 	instanceId := uuid.New().String() 
-	httpport := props["port"]
+	httpport := goDotEnvVariable("SERVICE_PORT")
 	hostname, err := os.Hostname()
 	if err != nil{
 		customlogger.Printfun("error","Enable to find hostname form OS, sending appname as host name")    	

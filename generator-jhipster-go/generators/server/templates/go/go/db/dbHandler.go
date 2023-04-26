@@ -3,10 +3,9 @@ package config
 import (   
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"   
-	"com.cmi.tic/domains"
-	"com.cmi.tic/customlogger"
+	"<%= packageName %>/domains"
+	"<%= packageName %>/customlogger"
 	"os"
-	// ft "com.cmi.tic/fileutil"
 	"log"
 	"github.com/joho/godotenv"
 )
@@ -22,13 +21,8 @@ func goDotEnvVariable(key string) string {
   }
 
 func DbConnect(){   
-    db_host :=goDotEnvVariable("db_host")
-    db_user :=goDotEnvVariable("db_user")
-	db_name :=goDotEnvVariable("db_name")
-	db_port :=goDotEnvVariable("db_port")
-	// props, _ := ft.ReadPropertiesFile("config.properties")
-	dsn := "host="+db_host+" user="+db_user+" dbname="+db_name+" port="+db_port;
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})   
+    db_url :=goDotEnvVariable("DB_URL")
+	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{})   
 	Database = db   
 	if err != nil{      
 		panic("failed to connect database")

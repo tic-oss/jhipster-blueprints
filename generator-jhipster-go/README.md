@@ -75,3 +75,22 @@
       go run .
   ---
   
+### .env file sample  
+SERVICE_PORT=9001
+SERVICE_REGISTRY="NETFLIX_EUREKA"
+SERVICE_REGISTRY_URL=http://admin:admin@localhost:8761/eureka/apps/
+AUTHENTICATION_KEYCLOAK=true
+DB_HOST=localhost
+DB_USER=go
+DB_NAME=postgres 
+DB_PORT=5433
+DB_URL=postgresql://go@localhost:5433/postgres
+
+### build an image 
+   ---
+       docker build -t image_name .
+   ---
+### run by passing values 
+    ---
+        docker run -it --network="host" -p 9001:9001 -e db_url=postgresql://go@localhost:5433/postgres image_name 
+    ---
