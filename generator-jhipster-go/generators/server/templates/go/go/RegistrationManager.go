@@ -10,6 +10,7 @@ type RegistrationManager interface {
 type RegistrationVariables struct {
 	registryType       string
 	serviceRegistryURL string
+	instanceId         string
 }
 
 func (rv RegistrationVariables) RegistryType() string {

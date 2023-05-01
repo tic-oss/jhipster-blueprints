@@ -5,7 +5,7 @@ import (
 	"time"
 	"github.com/carlescere/scheduler"
 	"runtime"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"os"
 	"<%= packageName %>/customlogger"
 	// "github.com/joho/godotenv"
@@ -77,12 +77,12 @@ type EurekaRegistrationManager struct {
 
 func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs RegistrationVariables) {
 	customlogger.Printfun("info","Registering service with status : STARTING")    
-	body :=  erm.getBodyForEureka("STARTING")    
+	body :=  erm.getBodyForEureka("STARTING", eurekaConfigs)    
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"<%= baseName %>", body, nil)
 	customlogger.Printfun("info","Waiting for 10 seconds for application to start properly")    	
 	time.Sleep(10 * time.Second)
 	customlogger.Printfun("info","Updating the status to : UP")    	
-	bodyUP :=  erm.getBodyForEureka("UP")
+	bodyUP :=  erm.getBodyForEureka("UP", eurekaConfigs)
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"<%= baseName %>", bodyUP, nil)
 }
 
@@ -105,9 +105,7 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 	helper.MakePostCall(configs.ServiceRegistryURL(), nil, nil)
 }
 
-func (erm EurekaRegistrationManager) getBodyForEureka(status string) *AppRegistrationBody {
-	
-	instanceId := uuid.New().String() 
+func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
 	httpport := goDotEnvVariable("SERVICE_PORT")
 	hostname, err := os.Hostname()
 	if err != nil{
@@ -127,7 +125,7 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string) *AppRegistr
 	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
 	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 
-	instance := InstanceDetails{instanceId,hostname, "<%= baseName %>", "<%= baseName %>", "<%= baseName %>",
+	instance := InstanceDetails{configs.instanceId, hostname, "<%= baseName %>", "<%= baseName %>", "<%= baseName %>",
 		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo}
 
 	body := &AppRegistrationBody{instance}
