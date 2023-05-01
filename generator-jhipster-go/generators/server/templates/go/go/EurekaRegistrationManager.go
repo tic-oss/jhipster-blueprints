@@ -88,13 +88,9 @@ func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs R
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
 	customlogger.Printfun("info","In SendHeartBeat!")    	
-	hostname, err := os.Hostname()
-	if err != nil{
-		customlogger.Printfun("error","Error while getting hostname which shall be used as APP ID")    	
-	}
 	job := func() {
 		customlogger.Printfun("info","sending heartbeat : "+ time.Now().UTC().String())    	
-		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+ "<%= baseName %>/"+hostname, nil, nil)
+		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+ "<%= baseName %>/"+eurekaConfigs.instanceId, nil, nil)
 	}
 	// Run every 25 seconds but not now.
 	scheduler.Every(25).Seconds().Run(job)
