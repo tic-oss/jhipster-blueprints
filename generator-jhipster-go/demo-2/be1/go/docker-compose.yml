@@ -1,0 +1,25 @@
+version: '3'
+services:
+  go:
+    build: .
+    container_name: demo
+    ports:
+      - '9001:9001'
+    depends_on:
+      - key
+      - jhip
+      - postdb
+  key:
+    extends:
+      file: '../docker/keycloak.yml'
+      service: keycloak
+  jhip:
+    extends:
+      file: '../docker/jhipster-registry.yml'
+      service: jhipster-registry
+    depends_on:
+      - key
+  postdb:
+    extends:
+      file: '../docker/postgresql.yml'
+      service: go-postgresql
