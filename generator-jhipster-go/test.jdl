@@ -1,0 +1,29 @@
+application {
+    config {
+        baseName be,
+        applicationType microservice,
+        packageName com.cmi.tic,
+        authenticationType oauth2,
+        databaseType sql,
+        prodDatabaseType postgresql,
+        devDatabaseType postgresql,
+        serviceDiscoveryType eureka,
+        serverPort 9001,
+        blueprints [go]
+    } 
+}
+
+deployment {
+  deploymentType kubernetes
+  appsFolders [ be ]
+  dockerRepositoryName "raxkumar"
+  serviceDiscoveryType eureka
+  kubernetesNamespace k8s
+  kubernetesServiceType Ingress
+  ingressType Ingress
+  ingressDomain "shopt.gq"
+  istio true
+  kubernetesUseDynamicStorage true
+  kubernetesStorageClassName "demosc"
+
+}
