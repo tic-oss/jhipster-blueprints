@@ -36,17 +36,17 @@ func createLogger(fname string) *loggers {
 }
 
 func Printfun(level string,msg string) {
-    logger := GetInstance()
-    if(level=="info"){
-    logger.InfoLogger.Println(msg)
-    }
+    // logger := GetInstance()
+    // if(level=="info"){
+    // logger.InfoLogger.Println(msg)
+    // }
 
-    if(level=="warn"){
-     logger.WarningLogger.Println(msg)
-    }
+    // if(level=="warn"){
+    //  logger.WarningLogger.Println(msg)
+    // }
 
-    if(level=="error"){
-    logger.ErrorLogger.Println(msg)
-    }
+    // if(level=="error"){
+    // logger.ErrorLogger.Println(msg)
+    // }
     log.Println(msg)
 }

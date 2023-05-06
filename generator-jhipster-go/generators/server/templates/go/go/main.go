@@ -28,7 +28,7 @@ var configurations RegistrationVariables
 func init() {
 	service_registry :=goDotEnvVariable("SERVICE_REGISTRY")
 	service_registry_url :=goDotEnvVariable("SERVICE_REGISTRY_URL")
-	InstanceId := "<%= baseName %>Service:"+uuid.New().String()
+	InstanceId := "<%= baseName %>:"+uuid.New().String()
 	configurations = RegistrationVariables{service_registry,service_registry_url,InstanceId}
 }
 
