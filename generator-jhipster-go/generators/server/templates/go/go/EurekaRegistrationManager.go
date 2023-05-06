@@ -118,9 +118,9 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	securePort := Port{"8443","false"}
 	dataCenterInfo := DataCenterInfo{"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo","MyOwn"}
 
-	homePageUrl := "http://"+ipAddress+":"+httpport
-	statusPageUrl := "http://"+ipAddress+":"+httpport+"/status"
-	healthCheckUrl := "http://"+ipAddress+":"+httpport+"/healthcheck"
+	homePageUrl := "http://"+hostname+":"+httpport
+	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
+	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 
 	instance := InstanceDetails{configs.instanceId, hostname, "<%= baseName %>", "<%= baseName %>", "<%= baseName %>",
 		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo}
