@@ -20,6 +20,7 @@ import (
 	"github.com/asim/go-micro/v3/registry"
 	<%_ } _%>
 	<%_ if (rabbitmq){  _%>
+	"github.com/carlescere/scheduler"
 	"github.com/asim/go-micro/v3/broker"
 	"github.com/asim/go-micro/plugins/broker/rabbitmq/v3"
 	<%_ } _%>
@@ -120,12 +121,16 @@ func main() {
 	publisher := micro.NewPublisher("my-topic", srv.Client())
 
 	// Publish a message
-	if err := publisher.Publish(context.TODO(), &pb.MyMessage{
+	job := func(){
+		err := publisher.Publish(context.TODO(), &pb.MyMessage{
 		Id:"1",
 		Data: "Hello, World!",
-	}); err != nil {
+	});
+	if( err != nil) {
 		log.Fatalf("Failed to publish message: %v", err)
 	}
+    }
+    scheduler.Every(25).Seconds().Run(job)
 	<%_ } _%>    
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)

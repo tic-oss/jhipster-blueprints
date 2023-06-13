@@ -182,19 +182,19 @@ export default class extends ServerGenerator {
             postgresql:this.postgress
           }
           );
-          this.fs.copyTpl(
-            this.templatePath("go/go/proto"),
-            this.destinationPath("go/proto"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
-          }
-          );
         }
+        this.fs.copyTpl(
+          this.templatePath("go/go/proto"),
+          this.destinationPath("go/proto"), {
+          serverPort: this.serverPort,
+          packageName: this.packageName,
+          baseName: this.baseName,
+          auth:this.auth,
+          eureka:this.eureka,
+          rabbitmq:this.rabbitmq,
+          postgresql:this.postgress
+        }
+        );
         this.fs.copyTpl(
           this.templatePath("go/go/go.mod"),
           this.destinationPath("go/go.mod"), {
