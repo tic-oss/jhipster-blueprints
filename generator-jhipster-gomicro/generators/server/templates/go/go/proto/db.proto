@@ -1,0 +1,63 @@
+syntax = "proto3";
+import "google/protobuf/struct.proto";
+
+package db;
+
+option go_package = "./proto;db";
+
+service Db {
+	rpc Create(CreateRequest) returns (CreateResponse) {}
+	rpc Read(ReadRequest) returns (ReadResponse) {}
+	rpc Update(UpdateRequest) returns (UpdateResponse) {}
+	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+}
+
+
+// Read data from a table. Lookup can be by ID or via querying any field in the record.
+message ReadRequest {
+	// Read by id.
+	string id = 1;
+}
+
+message ReadResponse {
+	// JSON encoded records
+	repeated google.protobuf.Struct records = 1;
+}
+
+// Create a record in the database. Optionally include an "id" field otherwise it's set automatically.
+message CreateRequest {
+	// JSON encoded record or records (can be array or object)
+	google.protobuf.Struct record = 1;
+	// optional record id to use
+	string id = 2;
+}
+
+message CreateResponse {
+	// The id of the record (either specified or automatically created)
+	string id = 1;
+}
+
+// Update a record in the database. Include an "id" in the record to update.
+message UpdateRequest {
+	// The id of the record. If not specified it is inferred from the 'id' field of the record
+	string id = 1;
+	// record, JSON object
+	google.protobuf.Struct record = 2;
+}
+
+message UpdateResponse {}
+
+// Delete a record in the database by id.
+message DeleteRequest {
+	// id of the record
+	string id = 1;
+}
+
+message DeleteResponse {
+
+}
+
+message MyMessage {
+  string id = 1;
+  string data = 2;
+}

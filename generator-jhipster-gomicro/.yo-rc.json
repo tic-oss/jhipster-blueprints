@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "additionalSubGenerators": "",
+    "baseName": "gomicro",
+    "cli": false,
+    "entities": [],
+    "generators": {
+      "server": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "configuringEachEntity",
+          "loadingEntities",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      }
+    },
+    "jhipsterVersion": "7.10.0",
+    "localBlueprint": false,
+    "skipCommitHook": true,
+    "subGenerators": ["server"]
+  }
+}
