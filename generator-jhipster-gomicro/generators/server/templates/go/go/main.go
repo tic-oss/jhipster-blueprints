@@ -56,12 +56,30 @@ func initBroker() broker.Broker {
 }
 <%_ } _%>
 
+<%_ if (mongodb){ _%> 
+func GetClient() *mongo.Client {
+    clientOptions := options.Client().ApplyURI("mongodb+srv://harsha:harsha@cluster0.l7oje6h.mongodb.net/?retryWrites=true&w=majority")
+    client, err := mongo.NewClient(clientOptions)
+    if err != nil {
+        log.Fatal(err)
+    }
+    err = client.Connect(context.Background())
+    if err != nil {
+        log.Fatal(err)
+    }
+    return client
+}
+<%_ } _%>
+
 func main() {
 	<%_ if (auth){  _%>
 	auth.SetClient()
 	<%_ } _%>
 	<%_ if (postgresql){  _%>
 	dbAddress := os.Getenv("DB_URL")
+	<%_ } _%>
+	<%_ if (mongodb){ _%> 
+    dbAddress := os.Getenv("DB_URL")	
 	<%_ } _%>
 	<%_ if (eureka){  _%>
 	eurekaurl :=os.Getenv("SERVICE_REGISTRY_URL")
@@ -74,11 +92,11 @@ func main() {
 	broker :=initBroker()
 	<%_ } _%>
 	srv := micro.NewService(
-		micro.Name("<%= packageName %>"),
+		micro.Name("<%= baseName %>"),
 		micro.Version("latest"),
 		micro.Server(
 			server.NewServer(
-			server.Name("<%= packageName %>"),
+			server.Name("<%= baseName %>"),
 			server.Address(":"+string(port)),
 		),
 	 ),
@@ -95,6 +113,7 @@ func main() {
 	<%_ } _%>
     )
 	srv.Init()
+	
 	<%_ if (postgresql){  _%>
 	sqlDB, err := sql.Open("pgx", dbAddress)
 	if err != nil {
@@ -105,6 +124,20 @@ func main() {
 
 	pb.RegisterDbHandler(srv.Server(), h)
 	<%_ } _%>
+
+	<%_ if (mongodb){ _%> 
+     c :=GetClient()
+	 err := c.Ping(context.Background(), nil)
+     if err != nil {
+         log.Fatal("Couldn't connect to the database", err)
+     } else {
+         log.Println("Connected!")
+     }
+     h := &handler.Db{}
+	 h.DBConn(c)
+	 pb.RegisterDbHandler(srv.Server(), h)
+	<%_ } _%>
+
 	// Subscribe to the topic
 	<%_ if (rabbitmq){  _%>
 	if err := srv.Server().Subscribe(
@@ -132,6 +165,7 @@ func main() {
     }
     scheduler.Every(25).Seconds().Run(job)
 	<%_ } _%>    
+
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)
 	}

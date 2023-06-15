@@ -130,7 +130,6 @@ export default class extends ServerGenerator {
       //   });
       // },
       writing() {
-        console.log(this.serverPort,this.packageName,this.auth,this.eureka,this.rabbitmq);
         this.fs.copyTpl(
         this.templatePath("go/docker"),
         this.destinationPath("docker"), {
@@ -140,7 +139,8 @@ export default class extends ServerGenerator {
         auth:this.auth,
         eureka:this.eureka,
         rabbitmq:this.rabbitmq,
-        postgresql:this.postgress
+        postgresql:this.postgress,
+        mongodb:this.mongodb
         }
         );
         if(this.auth){
@@ -153,11 +153,12 @@ export default class extends ServerGenerator {
           auth:this.auth,
           eureka:this.eureka,
           rabbitmq:this.rabbitmq,
-          postgresql:this.postgress
+          postgresql:this.postgress,
+          mongodb:this.mongodb
         }
         );
         }
-        if(this.postgress){
+        if(this.postgress||this.mongodb){
           this.fs.copyTpl(
             this.templatePath("go/go/handler"),
             this.destinationPath("go/handler"), {
@@ -167,7 +168,8 @@ export default class extends ServerGenerator {
             auth:this.auth,
             eureka:this.eureka,
             rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
+            postgresql:this.postgress,
+            mongodb:this.mongodb
           }
           );
           this.fs.copyTpl(
@@ -179,7 +181,8 @@ export default class extends ServerGenerator {
             auth:this.auth,
             eureka:this.eureka,
             rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
+            postgresql:this.postgress,
+            mongodb:this.mongodb
           }
           );
         }
@@ -192,7 +195,8 @@ export default class extends ServerGenerator {
           auth:this.auth,
           eureka:this.eureka,
           rabbitmq:this.rabbitmq,
-          postgresql:this.postgress
+          postgresql:this.postgress,
+          mongodb:this.mongodb
         }
         );
         this.fs.copyTpl(
@@ -204,7 +208,8 @@ export default class extends ServerGenerator {
             auth:this.auth,
             eureka:this.eureka,
             rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
+            postgresql:this.postgress,
+            mongodb:this.mongodb
         }
         );
         this.fs.copyTpl(
@@ -216,7 +221,14 @@ export default class extends ServerGenerator {
             auth:this.auth,
             eureka:this.eureka,
             rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
+            postgresql:this.postgress,
+            mongodb:this.mongodb
+        }
+        );
+        this.fs.copyTpl(
+          this.templatePath("go/go/Dockerfile"),
+          this.destinationPath("go/Dockerfile"), {
+          serverPort: this.serverPort
         }
         );
         this.fs.copyTpl(
@@ -240,7 +252,8 @@ export default class extends ServerGenerator {
             auth:this.auth,
             eureka:this.eureka,
             rabbitmq:this.rabbitmq,
-            postgresql:this.postgress
+            postgresql:this.postgress,
+            mongodb:this.mongodb
         }
         );
       }

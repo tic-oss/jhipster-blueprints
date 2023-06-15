@@ -28,7 +28,7 @@ type ReadRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Read by id.
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=_id,proto3" json:"_id,omitempty" bson:"_id,omitempty"`
 }
 
 func (x *ReadRequest) Reset() {
@@ -127,7 +127,7 @@ type CreateRequest struct {
 	// JSON encoded record or records (can be array or object)
 	Record *_struct.Struct `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
 	// optional record id to use
-	Id string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,2,opt,name=_id,proto3" json:"_id,omitempty" bson:"_id,omitempty"`
 }
 
 func (x *CreateRequest) Reset() {
@@ -182,7 +182,7 @@ type CreateResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The id of the record (either specified or automatically created)
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=_id,proto3" json:"_id,omitempty"`
 }
 
 func (x *CreateResponse) Reset() {
@@ -231,7 +231,7 @@ type UpdateRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The id of the record. If not specified it is inferred from the 'id' field of the record
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=_id,proto3" json:"_id,omitempty"`
 	// record, JSON object
 	Record *_struct.Struct `protobuf:"bytes,2,opt,name=record,proto3" json:"record,omitempty"`
 }
@@ -327,7 +327,7 @@ type DeleteRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// id of the record
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=_id,proto3" json:"_id,omitempty"`
 }
 
 func (x *DeleteRequest) Reset() {
@@ -412,7 +412,7 @@ type MyMessage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id   string `protobuf:"bytes,1,opt,name=_id,proto3" json:"_id,omitempty"`
 	Data string `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 

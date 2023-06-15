@@ -7,12 +7,13 @@
       cd go
       go mod tidy
   ---
-  + First run the postgress,keycloak and jhipster registry files.
+  + First run the postgress,keycloak and jhipster registry files also start rabbitmq server.
   ---
       cd docker
       docker-compose -f  postgresql.yml up     
       docker-compose -f  keycloak.yml up     
-      docker-compose -f  jhipster-registry.yml up    
+      docker-compose -f  jhipster-registry.yml up   
+      docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
   ---
 
 
@@ -28,7 +29,12 @@
     - DB_NAME=postgres 
     - DB_PORT=5433
     - KEYCLOAK_URL=http://localhost:9080
-    - DB_URL=postgresql://go@localhost:5433/postgres
+    - CLIENT_ID=internal
+    - CLIENT_SECRET=internal
+    - REALM_NAME=jhipster
+    + (DB_URL based on selection of url)
+    - DB_URL=mongodb+srv://harsha:harsha@cluster0.l7oje6h.mongodb.net/?retryWrites=true&w=majority (or) postgresql://go@localhost:5433/postgres
+    - MESSAGE_BROKER=amqp://guest:guest@localhost:5672
 ---
 
   + Now get back to the root directory of go and start the golang service 

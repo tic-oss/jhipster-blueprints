@@ -1,26 +1,37 @@
 package gorm
 
 import (
+	<%_ if (mongodb){ _%>    
+    "go.mongodb.org/mongo-driver/mongo"
+	<%_ } _%>
+	<%_ if (postgresql){  _%>
 	"database/sql"
-	"sync"
-	"gorm.io/gorm"
+	<%_ } _%>
+
 )
 
 type Helper struct {
-	sync.RWMutex
-	gormConns  map[string]*gorm.DB
+	<%_ if (postgresql){  _%>
 	dbConn     *sql.DB
-	migrations []interface{}
+	<%_ } _%>
+	<%_ if (mongodb){ _%> 
+	dbConn     *mongo.Client
+	<%_ } _%>
+
 }
 
-func (h *Helper) Migrations(migrations ...interface{}) *Helper {
-	h.migrations = migrations
-	return h
-}
-
+<%_ if (postgresql){  _%>
 func (h *Helper) DBConn(conn *sql.DB) *Helper {
 	h.dbConn = conn
-	h.gormConns = map[string]*gorm.DB{}
 	return h
 }
+<%_ } _%>
+
+<%_ if (mongodb){ _%> 
+func (h *Helper) DBConn(conn *mongo.Client) *Helper {
+	h.dbConn = conn
+	return h
+}
+<%_ } _%>
+	
 

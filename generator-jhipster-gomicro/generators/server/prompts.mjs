@@ -145,6 +145,7 @@ const {
 
 export async function askForServerSideOpts() {
   if (this.options.fromJdl){ 
+      console.log(this.jhipsterConfigWithDefaults.databaseType)
       this.serverPort=this.jhipsterConfigWithDefaults.serverPort;
       this.packageName=this.jhipsterConfigWithDefaults.packageName;
       this.baseName=this.jhipsterConfigWithDefaults.baseName;
@@ -152,6 +153,7 @@ export async function askForServerSideOpts() {
       this.eureka=(this.jhipsterConfigWithDefaults.serviceDiscoveryType=="eureka")
       this.rabbitmq=(this.jhipsterConfigWithDefaults.messageBroker=="rabbitmq")
       this.postgress=(this.jhipsterConfigWithDefaults.devDatabaseType=="postgresql")
+      this.mongodb=(this.jhipsterConfigWithDefaults.databaseType=="mongodb")
     return ;
   }
 
@@ -329,6 +331,7 @@ export async function askForServerSideOpts() {
       this.eureka=(answers.serviceDiscoveryType=='eureka')
       this.rabbitmq=(answers.messageBroker=='rabbitmq')
       this.postgress=(answers.devDatabaseType=='postgresql')
+      this.mongodb=(answers.databaseType=='mongodb')
       /* answers structure   
      {
         serverPort: '8080',
