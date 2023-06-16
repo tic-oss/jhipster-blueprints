@@ -35,6 +35,7 @@ func createLogger(fname string) *loggers {
         ErrorLogger: log.New(file,"ERROR:",log.LstdFlags|log.Lshortfile)}
 }
 
+// uncomment if you want logs with in file
 func Printfun(level string,msg string) {
     // logger := GetInstance()
     // if(level=="info"){
