@@ -40,7 +40,7 @@ func init(){
 
 <%_ if (rabbitmq){  _%>
 	func Initializerabbitmq() *amqp.Connection{
-		rabbitmqurl :=os.Getenv("MESSAGE_BROKER")
+		rabbitmqurl :=os.Getenv("GO_MICRO_MESSAGE_BROKER")
 		conn, err := amqp.Dial(rabbitmqurl)
 		if err != nil {
 			logger.Errorf("Failed Initializing Broker Connection")
@@ -58,12 +58,12 @@ func main() {
 	handler.InitializeDb()
 	<%_ } _%>
 	<%_ if (eureka){  _%>
-	eurekaurl :=os.Getenv("SERVICE_REGISTRY_URL")
+	eurekaurl :=os.Getenv("GO_MICRO_SERVICE_REGISTRY_URL")
 	opts := []registry.Option{
 		registry.Addrs(eurekaurl),
 	}
 	<%_ } _%>
-	port :=os.Getenv("SERVICE_PORT")
+	port :=os.Getenv("GO_MICRO_SERVICE_PORT")
 	<%_ if (rabbitmq){  _%>
 	conn = Initializerabbitmq()
 	<%_ } _%>
@@ -82,12 +82,14 @@ func main() {
 	}
 	srv.Init(opts1...)
 	r := mux.NewRouter()
+	<%_ if (postgresql){  _%>
 	r.Handle("/event",auth.Protect(http.HandlerFunc(handler.CreateHandler))).Methods(http.MethodPost)
 	r.Handle("/events",auth.Protect(http.HandlerFunc(handler.ReadHandler))).Methods(http.MethodGet)
 	r.Handle("/events/{id}",auth.Protect(http.HandlerFunc(handler.ReadByIdHandler))).Methods(http.MethodGet)
 	r.Handle("/update",auth.Protect(http.HandlerFunc(handler.UpdateHandler))).Methods(http.MethodPatch)
 	r.Handle("/delete/{id}",auth.Protect(http.HandlerFunc(handler.DeleteHandler))).Methods(http.MethodDelete)
-	
+	<%_ } _%>
+
 	r.HandleFunc("/management/health/readiness", func(w http.ResponseWriter, _ *http.Request) {   
 	json.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"readinessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
 	

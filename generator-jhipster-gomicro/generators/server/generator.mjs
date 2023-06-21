@@ -33,7 +33,7 @@ export default class extends ServerGenerator {
         // Have Yeoman greet the user.
         this.log(
           yosay(
-            `${chalk.red('golang-blueprint')}`
+            `${chalk.red('gomicro-blueprint')}`
           )
         );
       },

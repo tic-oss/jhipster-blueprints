@@ -11,18 +11,18 @@ import (
 
 var (
 	client *gocloak.GoCloak
-	clientid string
-	clientsecret string
-	realmname string
-	keycloakurl string
+	clientId string
+	clientSecret string
+	realmName string
+	keycloakUrl string
 )
 
 func SetClient() {
-	clientid =os.Getenv("CLIENT_ID")
-	clientsecret = os.Getenv("CLIENT_SECRET")
-	realmname =os.Getenv("REALM_NAME")
-	keycloakurl=os.Getenv("KEYCLOAK_URL")
-	client = gocloak.NewClient(keycloakurl)
+	clientId =os.Getenv("GO_MICRO_CLIENT_ID")
+	clientSecret = os.Getenv("GO_MICRO_CLIENT_SECRET")
+	realmName =os.Getenv("GO_MICRO_REALM_NAME")
+	keycloakUrl=os.Getenv("GO_MICRO_KEYCLOAK_URL")
+	client = gocloak.NewClient(keycloakUrl)
 }
 
 
@@ -35,7 +35,7 @@ func Protect(next http.Handler) http.Handler {
 			return
 		}
 		accessToken := authHeader
-		rptResult, err := client.RetrospectToken(context.TODO(),string(accessToken), clientid,clientsecret, realmname)
+		rptResult, err := client.RetrospectToken(context.TODO(),string(accessToken), clientId,clientSecret, realmName)
 		if err != nil {
 			logger.Errorf("Inspection failed: %s", err.Error())
 			return 

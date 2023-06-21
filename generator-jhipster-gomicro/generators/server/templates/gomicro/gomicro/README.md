@@ -20,21 +20,15 @@
   + Create a .env file in the go sub directory 
   ---
     ### .env file sample  
-    - SERVICE_PORT= <port_number>
-    - SERVICE_REGISTRY="NETFLIX_EUREKA"
-    - SERVICE_REGISTRY_URL=http://admin:admin@localhost:8761/eureka
-    - AUTHENTICATION_KEYCLOAK=true 
-    - DB_HOST=localhost 
-    - DB_USER=go
-    - DB_NAME=postgres 
-    - DB_PORT=5433
-    - KEYCLOAK_URL=http://localhost:9080
-    - CLIENT_ID=internal
-    - CLIENT_SECRET=internal
-    - REALM_NAME=jhipster
-    + (DB_URL based on selection of url)
-    - DB_URL=postgresql://go@localhost:5433/postgres
-    - MESSAGE_BROKER=amqp://guest:guest@localhost:5672
+    - GO_MICRO_SERVICE_PORT= <port_number>
+    - GO_MICRO_SERVICE_REGISTRY_URL=http://admin:admin@localhost:8761/eureka 
+    - GO_MICRO_KEYCLOAK_URL=http://localhost:9080
+    - GO_MICRO_CLIENT_ID=internal
+    - GO_MICRO_CLIENT_SECRET=internal
+    - GO_MICRO_REALM_NAME=jhipster
+    + (DB_URL based on selection of Db)
+    - GO_MICRO_DB_URL=postgresql://go@localhost:5433/postgres
+    - GO_MICRO_MESSAGE_BROKER=amqp://guest:guest@localhost:5672
 ---
 
   + Now get back to the root directory of go and start the golang service 
