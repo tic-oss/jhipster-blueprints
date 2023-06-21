@@ -11,4 +11,4 @@ RUN go mod tidy
 
 EXPOSE <%= serverPort %>
 
-CMD ["go","run","."]
+CMD ["go","run","."]       

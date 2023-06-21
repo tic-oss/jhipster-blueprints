@@ -120,145 +120,56 @@ export default class extends ServerGenerator {
 
   get [ServerGenerator.WRITING]() {
     return {
-      // ...super.writing,
-      // async writingTemplateTask() {
-      //   await this.writeFiles({
-      //     sections: {
-      //       files: [{ templates: ["template-file-server"] }],
-      //     },
-      //     context: this,
-      //   });
-      // },
       writing() {
-        this.fs.copyTpl(
-        this.templatePath("go/docker"),
-        this.destinationPath("docker"), {
-        serverPort: this.serverPort,
-        packageName: this.packageName,
-        baseName: this.baseName,
-        auth:this.auth,
-        eureka:this.eureka,
-        rabbitmq:this.rabbitmq,
-        postgresql:this.postgress,
-        mongodb:this.mongodb
-        }
-        );
-        if(this.auth){
-        this.fs.copyTpl(
-          this.templatePath("go/go/auth"),
-          this.destinationPath("go/auth"), {
+        const templateVariables = {
           serverPort: this.serverPort,
           packageName: this.packageName,
           baseName: this.baseName,
-          auth:this.auth,
-          eureka:this.eureka,
-          rabbitmq:this.rabbitmq,
-          postgresql:this.postgress,
-          mongodb:this.mongodb
-        }
-        );
-        }
-        if(this.postgress||this.mongodb){
+          auth: this.auth,
+          eureka: this.eureka,
+          rabbitmq: this.rabbitmq,
+          postgresql: this.postgress,
+          mongodb: this.mongodb
+        };
+      
+        const templatePaths = [
+          { src: "gomicro/docker", dest: "docker" },
+          { src: "gomicro/gomicro/proto", dest: "gomicro/proto" },
+          { src: "gomicro/gomicro/go.mod", dest: "gomicro/go.mod" },
+          { src: "gomicro/gomicro/main.go", dest: "gomicro/main.go" },
+          { src: "gomicro/gomicro/Dockerfile", dest: "gomicro/Dockerfile" },
+          { src: "gomicro/gomicro/Makefile", dest: "gomicro/Makefile" },
+          { src: "gomicro/gomicro/README.md", dest: "gomicro/README.md" },
+          { src: "gomicro/gomicro/.env", dest: "gomicro/.env" }
+        ];
+      
+        const conditionalTemplates = [
+          { condition: this.auth, src: "gomicro/gomicro/auth", dest: "gomicro/auth" },
+          { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/handler", dest: "gomicro/handler" },
+          { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/db", dest: "gomicro/db" },
+          { condition: this.rabbitmq, src: "gomicro/gomicro/consumer.go", dest: "gomicro/consumer.go" }
+        ];
+      
+        templatePaths.forEach(({ src, dest }) => {
           this.fs.copyTpl(
-            this.templatePath("go/go/handler"),
-            this.destinationPath("go/handler"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress,
-            mongodb:this.mongodb
-          }
+            this.templatePath(src),
+            this.destinationPath(dest),
+            templateVariables
           );
-          this.fs.copyTpl(
-            this.templatePath("go/go/pkg"),
-            this.destinationPath("go/pkg"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress,
-            mongodb:this.mongodb
+        });
+      
+        conditionalTemplates.forEach(({ condition, src, dest }) => {
+          if (condition) {
+            this.fs.copyTpl(
+              this.templatePath(src),
+              this.destinationPath(dest),
+              templateVariables
+            );
           }
-          );
-        }
-        this.fs.copyTpl(
-          this.templatePath("go/go/proto"),
-          this.destinationPath("go/proto"), {
-          serverPort: this.serverPort,
-          packageName: this.packageName,
-          baseName: this.baseName,
-          auth:this.auth,
-          eureka:this.eureka,
-          rabbitmq:this.rabbitmq,
-          postgresql:this.postgress,
-          mongodb:this.mongodb
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/go.mod"),
-          this.destinationPath("go/go.mod"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress,
-            mongodb:this.mongodb
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/main.go"),
-          this.destinationPath("go/main.go"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress,
-            mongodb:this.mongodb
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/Dockerfile"),
-          this.destinationPath("go/Dockerfile"), {
-          serverPort: this.serverPort
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/Makefile"),
-          this.destinationPath("go/Makefile"), {
-          serverPort: this.serverPort
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/README.md"),
-          this.destinationPath("go/README.md"), {
-          serverPort: this.serverPort
-        }
-        );
-        this.fs.copyTpl(
-          this.templatePath("go/go/.env"),
-          this.destinationPath("go/.env"), {
-            serverPort: this.serverPort,
-            packageName: this.packageName,
-            baseName: this.baseName,
-            auth:this.auth,
-            eureka:this.eureka,
-            rabbitmq:this.rabbitmq,
-            postgresql:this.postgress,
-            mongodb:this.mongodb
-        }
-        );
+        });
       }
-    };
-  }
+     }
+}
 
   get [ServerGenerator.WRITING_ENTITIES]() {
     return {

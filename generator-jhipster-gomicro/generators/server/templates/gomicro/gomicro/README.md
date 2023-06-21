@@ -33,7 +33,7 @@
     - CLIENT_SECRET=internal
     - REALM_NAME=jhipster
     + (DB_URL based on selection of url)
-    - DB_URL=mongodb+srv://harsha:harsha@cluster0.l7oje6h.mongodb.net/?retryWrites=true&w=majority (or) postgresql://go@localhost:5433/postgres
+    - DB_URL=postgresql://go@localhost:5433/postgres
     - MESSAGE_BROKER=amqp://guest:guest@localhost:5672
 ---
 
