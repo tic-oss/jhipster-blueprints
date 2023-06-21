@@ -36,6 +36,7 @@ func Protect(next http.Handler) http.Handler {
 		}
 		accessToken := authHeader
 		rptResult, err := client.RetrospectToken(context.TODO(),string(accessToken), clientId,clientSecret, realmName)
+
 		if err != nil {
 			logger.Errorf("Inspection failed: %s", err.Error())
 			return 

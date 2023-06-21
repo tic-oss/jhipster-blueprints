@@ -6,7 +6,7 @@ import (
 	"github.com/carlescere/scheduler"
 	"runtime"
 	// "github.com/google/uuid"
-	"os"
+	// "os"
 	"<%= packageName %>/customlogger"
 	// "github.com/joho/godotenv"
 
@@ -103,10 +103,11 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
 	httpport := goDotEnvVariable("SERVICE_PORT")
-	hostname, err := os.Hostname()
-	if err != nil{
-		customlogger.Printfun("error","Enable to find hostname form OS, sending appname as host name")    	
-	}
+	// hostname, err := os.Hostname()
+	// if err != nil{
+	// 	customlogger.Printfun("error","Enable to find hostname form OS, sending appname as host name")    	
+	// }
+	hostname := "<%= baseName %>"
 
 	ipAddress, err := helper.ExternalIP()
 	if err != nil{

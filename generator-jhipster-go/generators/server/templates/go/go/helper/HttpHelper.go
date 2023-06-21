@@ -89,6 +89,6 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 		customlogger.Printfun("error","Error while making PUT call " + err.Error())    
 		return errors.New("Error while making PUT call " + err.Error()), nil
 	}
-	customlogger.Printfun("info","Error while making PUT call " + "Successfull POST call with HTTP Status : " + resp.Status)    
+	customlogger.Printfun("info","Error while making PUT call Successfull POST call with HTTP Status : " + resp.Status)    
 	return nil, resp
 }

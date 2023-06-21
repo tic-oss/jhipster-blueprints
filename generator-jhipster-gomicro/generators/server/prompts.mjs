@@ -152,6 +152,7 @@ export async function askForServerSideOpts() {
       this.eureka=(this.jhipsterConfigWithDefaults.serviceDiscoveryType=="eureka")
       this.rabbitmq=(this.jhipsterConfigWithDefaults.messageBroker=="rabbitmq")
       this.postgress=(this.jhipsterConfigWithDefaults.prodDatabaseType=="postgresql")
+
       this.mongodb=(this.jhipsterConfigWithDefaults.databaseType=="mongodb")
     return ;
   }
@@ -331,18 +332,6 @@ export async function askForServerSideOpts() {
       this.rabbitmq=(answers.messageBroker=='rabbitmq')
       this.postgress=(answers.prodDatabaseType=='postgresql')
       this.mongodb=(answers.databaseType=='mongodb')
-  /* answers structure   
-     {
-        serverPort: '8080',
-        packageName: 'tic',
-        serviceDiscoveryType: 'eureka',
-        authenticationType: 'oauth2',
-        databaseType: 'sql',
-        prodDatabaseType: 'postgresql',
-        devDatabaseType: 'postgresql',
-        messageBroker: 'rabbitmq'
-      }
-  */
     });
 
 }
