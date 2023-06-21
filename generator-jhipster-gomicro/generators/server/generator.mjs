@@ -147,7 +147,8 @@ export default class extends ServerGenerator {
           { condition: this.auth, src: "gomicro/gomicro/auth", dest: "gomicro/auth" },
           { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/handler", dest: "gomicro/handler" },
           { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/db", dest: "gomicro/db" },
-          { condition: this.rabbitmq, src: "gomicro/gomicro/consumer.go", dest: "gomicro/consumer.go" }
+          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry", dest: "gomicro/eurekaregistry" },
+          { condition: this.rabbitmq, src: "gomicro/gomicro/rabbitmq", dest: "gomicro/rabbitmq" },
         ];
       
         templatePaths.forEach(({ src, dest }) => {

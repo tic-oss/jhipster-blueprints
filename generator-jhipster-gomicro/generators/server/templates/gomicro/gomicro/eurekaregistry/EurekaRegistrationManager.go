@@ -1,15 +1,12 @@
-package main
+package eureka
 
 import (
-	"<%= packageName %>/helper"
+	"<%= packageName %>/eurekaregistry/helper"
 	"time"
 	"github.com/carlescere/scheduler"
 	"runtime"
-	// "github.com/google/uuid"
-	// "os"
-	"<%= packageName %>/customlogger"
-	// "github.com/joho/godotenv"
-
+	"os"
+	"github.com/micro/micro/v3/service/logger"
 )
 /**
 Below is the format required by Eureka to register and application instance
@@ -68,21 +65,21 @@ type EurekaRegistrationManager struct {
 }
 
 func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs RegistrationVariables) {
-	customlogger.Printfun("info","Registering service with status : STARTING")    
+	logger.Infof("Registering service with status : STARTING")    
 	body :=  erm.getBodyForEureka("STARTING", eurekaConfigs)    
-	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"<%= baseName %>", body, nil)
-	customlogger.Printfun("info","Waiting for 10 seconds for application to start properly")    	
+	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", body, nil)
+	logger.Infof("Waiting for 10 seconds for application to start properly")    	
 	time.Sleep(10 * time.Second)
-	customlogger.Printfun("info","Updating the status to : UP")    	
+	logger.Infof("Updating the status to : UP")    	
 	bodyUP :=  erm.getBodyForEureka("UP", eurekaConfigs)
-	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL()+"<%= baseName %>", bodyUP, nil)
+	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", bodyUP, nil)
 }
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-	customlogger.Printfun("info","In SendHeartBeat!")    	
+	logger.Infof("info","In SendHeartBeat!")    	
 	job := func() {
-		customlogger.Printfun("info","sending heartbeat : "+ time.Now().UTC().String())    	
-		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL()+ "<%= baseName %>/"+eurekaConfigs.instanceId, nil, nil)
+		logger.Infof("sending heartbeat : "+ time.Now().UTC().String())    	
+		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL+ "<%= baseName %>/"+eurekaConfigs.InstanceId, nil, nil)
 	}
 	// Run every 25 seconds but not now.
 	scheduler.Every(25).Seconds().Run(job)
@@ -90,20 +87,20 @@ func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVar
 
 }
 func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs RegistrationVariables) {
-	helper.MakePostCall(configs.ServiceRegistryURL(), nil, nil)
+	helper.MakePostCall(configs.ServiceRegistryURL, nil, nil)
 }
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
-	httpport := goDotEnvVariable("SERVICE_PORT")
+	httpport := os.Getenv("SERVICE_PORT")
 	// hostname, err := os.Hostname()
 	// if err != nil{
-	// 	customlogger.Printfun("error","Enable to find hostname form OS, sending appname as host name")    	
+	// 	logger.Infof("error","Enable to find hostname form OS, sending appname as host name")    	
 	// }
 	hostname := "<%= baseName %>"
 
 	ipAddress, err := helper.ExternalIP()
 	if err != nil{
-		customlogger.Printfun("error","Enable to find IP address form OS")    	
+		logger.Errorf("Enable to find IP address form OS")    	
 	}
 
 	port := Port{httpport,"true"}
@@ -114,7 +111,7 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
 	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 
-	instance := InstanceDetails{configs.instanceId, hostname, "<%= baseName %>", "<%= baseName %>", "<%= baseName %>",
+	instance := InstanceDetails{configs.InstanceId, hostname, hostname, hostname, hostname,
 		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo}
 
 	body := &AppRegistrationBody{instance}
