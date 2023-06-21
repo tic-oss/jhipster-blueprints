@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"log"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	pb "<%= packageName %>/proto"
@@ -19,7 +18,6 @@ func InitializeDb(){
 }
 
 func CreateHandler(response http.ResponseWriter, request *http.Request){
-	log.Print("hii")
 	response.Header().Set("content-type", "application/json")
 	var event *pb.Event
 	_ = json.NewDecoder(request.Body).Decode(&event)
@@ -39,8 +37,7 @@ func ReadByIdHandler(response http.ResponseWriter, r *http.Request){
 	params := mux.Vars(r)
 	id := params["id"]
 	var event *pb.Event
-	e := client.Table(tableName).First(&event,id)
-	
+	e := client.Table(tableName).First(&event,id)	
 	if e.Error != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + e.Error.Error() + `" }`))

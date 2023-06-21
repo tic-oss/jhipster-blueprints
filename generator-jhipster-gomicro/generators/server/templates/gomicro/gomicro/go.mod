@@ -4,16 +4,17 @@ go 1.20
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.7.0
-	github.com/asim/go-micro/plugins/broker/rabbitmq/v3 v3.7.0
 	github.com/asim/go-micro/v3 v3.7.1
+	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
 	github.com/go-micro/plugins/v3/registry/eureka v1.1.0
+	github.com/go-micro/plugins/v3/server/http v1.0.1
 	github.com/golang/protobuf v1.5.3
-	github.com/google/uuid v1.3.0
+	github.com/gorilla/mux v1.8.0
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/joho/godotenv v1.5.1
 	github.com/micro/micro/v3 v3.18.5
+	github.com/streadway/amqp v1.0.0
 	google.golang.org/protobuf v1.30.0
-	gorm.io/datatypes v1.2.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.1
 )
@@ -33,9 +34,9 @@ require (
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
-	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/hudl/fargo v1.3.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -62,7 +63,6 @@ require (
 	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	github.com/streadway/amqp v1.0.0 // indirect
 	github.com/urfave/cli/v2 v2.3.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
@@ -75,5 +75,5 @@ require (
 	gopkg.in/gcfg.v1 v1.2.3 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gorm.io/driver/mysql v1.4.7 // indirect
 )
+
