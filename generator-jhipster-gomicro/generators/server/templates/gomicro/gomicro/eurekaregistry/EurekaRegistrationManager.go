@@ -91,7 +91,7 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 }
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
-	httpport := os.Getenv("SERVICE_PORT")
+	httpport := os.Getenv("GO_MICRO_SERVICE_PORT")
 	// hostname, err := os.Hostname()
 	// if err != nil{
 	// 	logger.Infof("error","Enable to find hostname form OS, sending appname as host name")    	
