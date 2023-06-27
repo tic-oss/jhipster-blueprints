@@ -1,4 +1,4 @@
-package rabbit
+package rabbitmq
 
 import (
 	"github.com/micro/micro/v3/service/logger"
@@ -7,8 +7,8 @@ import (
 )
 
 func Consume() {
-    rabbitmqurl :=os.Getenv("GO_MICRO_MESSAGE_BROKER")
-	conn,err := amqp.Dial(rabbitmqurl)
+    rabbitmqUrl :=os.Getenv("GO_MICRO_MESSAGE_BROKER")
+	conn,err := amqp.Dial(rabbitmqUrl)
 	if err != nil {
 		logger.Errorf("Failed Initializing Broker Connection")
 		panic(err)

@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"os"
 	"github.com/micro/micro/v3/service/logger"
+	"strconv"
 )
 /**
 Below is the format required by Eureka to register and application instance
@@ -49,6 +50,7 @@ type InstanceDetails struct {
 	StatusPageUrl    string         `json:"statusPageUrl"`
 	HomePageUrl      string         `json:"homePageUrl"`
 	DataCenterInfo   DataCenterInfo `json:"dataCenterInfo"`
+	LeaseInfo        LeaseInfo      `json:"leaseInfo"`
 }
 type Port struct {
 	Port    string `json:"$"`
@@ -58,6 +60,11 @@ type Port struct {
 type DataCenterInfo struct {
 	Class string `json:"@class"`
 	Name  string `json:"name"`
+}
+
+type LeaseInfo struct {
+    RenewalIntervalInSecs int `json:"renewalIntervalInSecs"`
+    DurationInSecs int `json:"durationInSecs"`
 }
 
 // This struct shall be responsible for manager to manage registration with Eureka
@@ -76,25 +83,27 @@ func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs R
 }
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-	logger.Infof("info","In SendHeartBeat!")    	
+	logger.Infof("In SendHeartBeat!")    	
 	job := func() {
 		logger.Infof("sending heartbeat : "+ time.Now().UTC().String())    	
 		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL+ "<%= baseName %>/"+eurekaConfigs.InstanceId, nil, nil)
 	}
-	// Run every 25 seconds but not now.
-	scheduler.Every(25).Seconds().Run(job)
+	// Run every 5 seconds but not now.
+	scheduler.Every(5).Seconds().Run(job)
 	runtime.Goexit()
 
 }
 func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs RegistrationVariables) {
-	helper.MakePostCall(configs.ServiceRegistryURL, nil, nil)
+	bodyDOWN :=  erm.getBodyForEureka("DOWN", configs)    
+	helper.MakePostCall(configs.ServiceRegistryURL+"<%= baseName %>", bodyDOWN, nil)
 }
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
 	httpport := os.Getenv("GO_MICRO_SERVICE_PORT")
+	//set this as hostname for local environment
 	// hostname, err := os.Hostname()
 	// if err != nil{
-	// 	logger.Infof("error","Enable to find hostname form OS, sending appname as host name")    	
+	// 	logger.Errorf("error","Enable to find hostname form OS, sending appname as host name")    	
 	// }
 	hostname := "<%= baseName %>"
 
@@ -103,8 +112,24 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 		logger.Errorf("Enable to find IP address form OS")    	
 	}
 
+    renewalStr, isset := os.LookupEnv("GO_MICRO_RENEWALINTERVALINSEC")
+	var renewal int
+	if isset {
+	  renewal, _ = strconv.Atoi(renewalStr)
+	} else {
+	  renewal = 90
+	}
+	durationStr, isset := os.LookupEnv("GO_MICRO_DURATIONINSECS")
+  	var duration int
+  	if isset {
+    	duration, _ = strconv.Atoi(durationStr)
+  	} else {
+    	duration = 30
+  	}
+
 	port := Port{httpport,"true"}
 	securePort := Port{"8443","false"}
+	leaseInfo := LeaseInfo{renewal,duration}
 	dataCenterInfo := DataCenterInfo{"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo","MyOwn"}
 
 	homePageUrl := "http://"+hostname+":"+httpport
@@ -112,7 +137,7 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 
 	instance := InstanceDetails{configs.InstanceId, hostname, hostname, hostname, hostname,
-		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo}
+		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo,leaseInfo}
 
 	body := &AppRegistrationBody{instance}
 	return body

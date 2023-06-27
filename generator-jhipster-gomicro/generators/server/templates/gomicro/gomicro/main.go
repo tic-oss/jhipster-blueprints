@@ -10,7 +10,7 @@ import (
 	"os"
 	"github.com/asim/go-micro/v3"
 	<%_ if (rabbitmq){  _%>
-	rabbit "<%= packageName %>/rabbitmq"
+	rabbitmq "<%= packageName %>/rabbitmq"
 	<%_ } _%>
 	"github.com/micro/micro/v3/service/logger"
 	<%_ if (eureka){  _%>
@@ -37,6 +37,9 @@ func init(){
 }
 
 func main() {
+	<%_ if (eureka){  _%>
+	defer cleanup()
+	<%_ } _%>
 	<%_ if (auth){  _%>
 	auth.SetClient()
 	<%_ } _%>
@@ -46,7 +49,7 @@ func main() {
 	<%_ if (eureka){  _%>
 	service_registry_url :=os.Getenv("GO_MICRO_SERVICE_REGISTRY_URL")
 	InstanceId := "<%= baseName %>:"+uuid.New().String()
-	configurations := eureka.RegistrationVariables {ServiceRegistryURL:service_registry_url,InstanceId:InstanceId}
+	configurations = eureka.RegistrationVariables {ServiceRegistryURL:service_registry_url,InstanceId:InstanceId}
 	<%_ } _%>
 	port :=os.Getenv("GO_MICRO_SERVICE_PORT")
 	srv := micro.NewService(
@@ -80,8 +83,8 @@ func main() {
 	<%_ } _%>
 
 	<%_ if (rabbitmq){  _%>
-	rabbit.Produce() 
-	go rabbit.Consume()
+	rabbitmq.Produce() 
+	go rabbitmq.Consume()
     <%_ } _%>
 	  
     if err := micro.RegisterHandler(srv.Server(), handlers); err != nil {
@@ -92,3 +95,7 @@ func main() {
 		logger.Fatal(err)
 	}
 }							
+
+func cleanup(){
+	eureka.Cleanup(configurations)
+}

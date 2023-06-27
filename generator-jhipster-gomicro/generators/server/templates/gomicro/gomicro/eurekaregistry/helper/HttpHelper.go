@@ -19,7 +19,7 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
     logger.Infof(msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
-		IdleConnTimeout:    30 * time.Second,
+		IdleConnTimeout:    10 * time.Second,
 		DisableCompression: true,
 	}
 	var buffer bytes.Buffer
@@ -56,7 +56,7 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 	logger.Infof(msg)    
 	tr := &http.Transport{
 		MaxIdleConns:       10,
-		IdleConnTimeout:    30 * time.Second,
+		IdleConnTimeout:    10 * time.Second,
 		DisableCompression: true,
 	}
 
@@ -89,6 +89,6 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 		logger.Errorf("Error while making PUT call " + err.Error())    
 		return errors.New("Error while making PUT call " + err.Error()), nil
 	}
-	logger.Infof("PUT call Successfull POST call with HTTP Status : " + resp.Status)    
+	logger.Infof("PUT call Successfull with HTTP Status : " + resp.Status)    
 	return nil, resp
 }
