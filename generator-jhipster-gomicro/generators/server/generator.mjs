@@ -140,13 +140,19 @@ export default class extends ServerGenerator {
           { src: "gomicro/gomicro/Dockerfile", dest: "gomicro/Dockerfile" },
           { src: "gomicro/gomicro/Makefile", dest: "gomicro/Makefile" },
           { src: "gomicro/gomicro/README.md", dest: "gomicro/README.md" },
-          { src: "gomicro/gomicro/.env", dest: "gomicro/.env" }
+          { src: "gomicro/gomicro/config", dest: "gomicro/config" },
+          { src: "gomicro/gomicro/app.yaml", dest: "gomicro/app.yaml" },
+          { src: "gomicro/gomicro/prod-config.yaml", dest: "gomicro/prod-config.yaml" },
+          { src: "gomicro/gomicro/dev-config.yaml", dest: "gomicro/dev-config.yaml" }
+
         ];
       
         const conditionalTemplates = [
           { condition: this.auth, src: "gomicro/gomicro/auth", dest: "gomicro/auth" },
-          { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/handler", dest: "gomicro/handler" },
-          { condition: this.postgress || this.mongodb, src: "gomicro/gomicro/db", dest: "gomicro/db" },
+          { condition: this.postgress, src: "gomicro/gomicro/handler/db.go", dest: "gomicro/handler/db.go" },
+          { condition: this.mongodb, src: "gomicro/gomicro/handler/mongodb.go", dest: "gomicro/handler/mongodb.go" },
+          { condition: this.postgress, src: "gomicro/gomicro/db/config.go", dest: "gomicro/db/config.go" },
+          { condition: this.mongodb, src: "gomicro/gomicro/db/mongoconfig.go", dest: "gomicro/db/mongoconfig.go" },
           { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry", dest: "gomicro/eurekaregistry" },
           { condition: this.rabbitmq, src: "gomicro/gomicro/rabbitmq", dest: "gomicro/rabbitmq" },
         ];

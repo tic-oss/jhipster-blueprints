@@ -4,12 +4,12 @@ import(
 	"github.com/carlescere/scheduler"
 	"github.com/streadway/amqp"
 	"github.com/micro/micro/v3/service/logger"
-	"os"
+	app "<%= packageName %>/config"
 )
 
 func Produce(){
 	job :=func(){
-		rabbitmqUrl :=os.Getenv("GO_MICRO_MESSAGE_BROKER")
+		rabbitmqUrl :=app.Getval("GO_MICRO_MESSAGE_BROKER")
 		conn,err := amqp.Dial(rabbitmqUrl)
 		if err != nil {
 			logger.Errorf("Failed Initializing Broker Connection")

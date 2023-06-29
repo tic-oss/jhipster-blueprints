@@ -3,7 +3,7 @@ package config
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm" 
-	"os"
+	app "<%= packageName %>/config"
 	"github.com/micro/micro/v3/service/logger"
 	"fmt"
 )
@@ -12,7 +12,7 @@ var stmt = "create table if not exists %v(id text not null, title text,descripti
 var tableName="event"
 
 func GetClient() *gorm.DB {
-    db_url :=os.Getenv("GO_MICRO_DB_URL")
+    db_url :=app.Getval("GO_MICRO_DB_URL")
 	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{})   
 	if err != nil{      
 		panic("failed to connect database")

@@ -4,10 +4,9 @@ import (
 	<%_ if (auth){  _%>
 	auth "<%= packageName %>/auth"
 	<%_ } _%>
-	<%_ if (postgresql){  _%>
+	<%_ if (postgresql||mongodb){  _%>
 	"<%= packageName %>/handler"
 	<%_ } _%>
-	"os"
 	"github.com/asim/go-micro/v3"
 	<%_ if (rabbitmq){  _%>
 	rabbitmq "<%= packageName %>/rabbitmq"
@@ -20,38 +19,35 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"net/http"
 	mhttp "github.com/go-micro/plugins/v3/server/http"
-   "github.com/joho/godotenv"
    "github.com/gorilla/mux"
-   "encoding/json"
+    jsons "encoding/json"
+	app "<%= packageName %>/config"
 )
 
 <%_ if (eureka){  _%>
 var configurations eureka.RegistrationVariables
 <%_ } _%>
 
-func init(){
-	err := godotenv.Load(".env")
-	if err != nil {
-		logger.Errorf("Error loading .env file")
-	}
-}
-
 func main() {
 	<%_ if (eureka){  _%>
 	defer cleanup()
 	<%_ } _%>
+	app.Setconfig()
 	<%_ if (auth){  _%>
 	auth.SetClient()
 	<%_ } _%>
 	<%_ if (postgresql){  _%>
 	handler.InitializeDb()
 	<%_ } _%>
+	<%_ if (mongodb){  _%>
+	handler.InitializeMongoDb()
+	<%_ } _%>
 	<%_ if (eureka){  _%>
-	service_registry_url :=os.Getenv("GO_MICRO_SERVICE_REGISTRY_URL")
+	service_registry_url :=app.Getval("GO_MICRO_SERVICE_REGISTRY_URL")
 	InstanceId := "<%= baseName %>:"+uuid.New().String()
 	configurations = eureka.RegistrationVariables {ServiceRegistryURL:service_registry_url,InstanceId:InstanceId}
 	<%_ } _%>
-	port :=os.Getenv("GO_MICRO_SERVICE_PORT")
+	port :=app.Getval("GO_MICRO_SERVICE_PORT")
 	srv := micro.NewService(
 		micro.Server(mhttp.NewServer()),
     )
@@ -69,12 +65,19 @@ func main() {
 	r.Handle("/update",auth.Protect(http.HandlerFunc(handler.UpdateHandler))).Methods(http.MethodPatch)
 	r.Handle("/delete/{id}",auth.Protect(http.HandlerFunc(handler.DeleteHandler))).Methods(http.MethodDelete)
 	<%_ } _%>
+	<%_ if (mongodb){  _%>
+	r.Handle("/event",auth.Protect(http.HandlerFunc(handler.AddEvent))).Methods(http.MethodPost)
+	r.Handle("/events",auth.Protect(http.HandlerFunc(handler.GetEvents))).Methods(http.MethodGet)
+	r.Handle("/events/{id}",auth.Protect(http.HandlerFunc(handler.ReadEventById))).Methods(http.MethodGet)
+	r.Handle("/update",auth.Protect(http.HandlerFunc(handler.UpdateEvent))).Methods(http.MethodPatch)
+	r.Handle("/delete/{id}",auth.Protect(http.HandlerFunc(handler.DeleteEvent))).Methods(http.MethodDelete)
+	<%_ } _%>
 	r.HandleFunc("/management/health/readiness", func(w http.ResponseWriter, _ *http.Request) {   
-	json.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"readinessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
+	jsons.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"readinessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
 	r.HandleFunc("/hello",func(w http.ResponseWriter, _ *http.Request){
-		json.NewEncoder(w).Encode("helloworld")}).Methods(http.MethodGet)
+		jsons.NewEncoder(w).Encode("helloworld")}).Methods(http.MethodGet)
 	r.HandleFunc("/management/health/liveness", func(w http.ResponseWriter, _ *http.Request) {     
-	json.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"livenessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
+	jsons.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"livenessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
 		
 	var handlers http.Handler = r
 	

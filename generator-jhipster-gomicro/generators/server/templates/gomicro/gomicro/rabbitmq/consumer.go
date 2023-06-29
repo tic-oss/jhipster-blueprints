@@ -3,11 +3,11 @@ package rabbitmq
 import (
 	"github.com/micro/micro/v3/service/logger"
 	"github.com/streadway/amqp"
-	"os"
+	app "<%= packageName %>/config"
 )
 
 func Consume() {
-    rabbitmqUrl :=os.Getenv("GO_MICRO_MESSAGE_BROKER")
+    rabbitmqUrl :=app.Getval("GO_MICRO_MESSAGE_BROKER")
 	conn,err := amqp.Dial(rabbitmqUrl)
 	if err != nil {
 		logger.Errorf("Failed Initializing Broker Connection")
