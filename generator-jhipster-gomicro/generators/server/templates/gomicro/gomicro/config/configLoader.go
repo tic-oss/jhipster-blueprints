@@ -17,8 +17,8 @@ var configValues map[string]interface{}
 func Setconfig(){
 	profile := "dev"
 	profiles := map[string]bool{"dev":true, "prod":true};
-	if( profiles[os.Getenv("GO_MICRO_PROFILE")] ){
-		profile = os.Getenv("GO_MICRO_PROFILE");
+	if( profiles[os.Getenv("GO_MICRO_ACTIVE_PROFILE")] ){
+		profile = os.Getenv("GO_MICRO_ACTIVE_PROFILE");
 	}
 	enc := yaml.NewEncoder()
 	configReader, _ := config.NewConfig(
