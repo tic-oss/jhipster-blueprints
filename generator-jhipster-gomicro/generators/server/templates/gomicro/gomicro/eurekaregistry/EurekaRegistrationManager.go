@@ -83,7 +83,6 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	
 	env :=os.Getenv("GO_MICRO_PROFILE")
 	if(env=="prod"){
-		//set this as hostname for local environment
 		hostname = "<%= baseName %>"
 	}
 

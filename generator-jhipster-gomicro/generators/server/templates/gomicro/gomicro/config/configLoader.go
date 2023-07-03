@@ -12,7 +12,7 @@ import(
 	"github.com/micro/micro/v3/service/logger"
 )
 
-var g map[string]interface{}
+var configValues map[string]interface{}
 
 func Setconfig(){
 	profile := "dev"
@@ -21,28 +21,28 @@ func Setconfig(){
 		profile = os.Getenv("GO_MICRO_PROFILE");
 	}
 	enc := yaml.NewEncoder()
-	c, _ := config.NewConfig(
+	configReader, _ := config.NewConfig(
 		config.WithReader(
 			json.NewReader( 
 				reader.WithEncoder(enc),
 			),
 		),
 	)
-	if err := c.Load(file.NewSource(
+	if err := configReader.Load(file.NewSource(
 		file.WithPath(("config/app.yaml")),
 	)); err != nil {
 		logger.Errorf(err.Error())
 		return
 	}
-	g=c.Map()
-	if err := c.Load(file.NewSource(
+	configValues=configReader.Map()
+	if err := configReader.Load(file.NewSource(
 		file.WithPath(("config/"+profile+"-config.yaml")),
 	)); err != nil {
 		logger.Errorf(err.Error())
 		return
 	}
-	for k,v :=range c.Map() {
-		g[k]=v
+	for k,v :=range configReader.Map() {
+		configValues[k]=v
 	}
 	LoadEnv()	
 }
@@ -51,12 +51,12 @@ func LoadEnv(){
 	for _,e :=range os.Environ(){
 		pair := strings.SplitN(e,"=",2)
 		if(strings.HasPrefix(pair[0],"GO_MICRO")){
-			g[pair[0]]=pair[1]
+			configValues[pair[0]]=pair[1]
 			logger.Infof(pair[0]+" loaded")
 		}
 	}
 }
 
 func GetVal(key string) string{
-	return fmt.Sprintf("%v",g[key])
+	return fmt.Sprintf("%v",configValues[key])
 }
