@@ -79,12 +79,12 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
 	httpport := app.GetVal("GO_MICRO_SERVICE_PORT")
-	hostname := "<%= baseName %>"
+	hostname, _ := os.Hostname()
 	
 	env :=os.Getenv("GO_MICRO_PROFILE")
 	if(env=="prod"){
 		//set this as hostname for local environment
-		hostname, _ = os.Hostname()
+		hostname = "<%= baseName %>"
 	}
 
 	ipAddress, err := helper.ExternalIP()
