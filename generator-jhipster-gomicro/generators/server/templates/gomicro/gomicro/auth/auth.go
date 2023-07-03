@@ -18,10 +18,10 @@ var (
 )
 
 func SetClient() {
-	clientId =app.Getval("GO_MICRO_CLIENT_ID")
-	clientSecret = app.Getval("GO_MICRO_CLIENT_SECRET")
-	realmName =app.Getval("GO_MICRO_REALM_NAME")
-	keycloakUrl=app.Getval("GO_MICRO_KEYCLOAK_URL")
+	clientId =app.GetVal("GO_MICRO_CLIENT_ID")
+	clientSecret = app.GetVal("GO_MICRO_CLIENT_SECRET")
+	realmName =app.GetVal("GO_MICRO_REALM_NAME")
+	keycloakUrl=app.GetVal("GO_MICRO_KEYCLOAK_URL")
 	client = gocloak.NewClient(keycloakUrl)
 }
 

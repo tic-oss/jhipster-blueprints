@@ -43,11 +43,11 @@ func main() {
 	handler.InitializeMongoDb()
 	<%_ } _%>
 	<%_ if (eureka){  _%>
-	service_registry_url :=app.Getval("GO_MICRO_SERVICE_REGISTRY_URL")
+	service_registry_url :=app.GetVal("GO_MICRO_SERVICE_REGISTRY_URL")
 	InstanceId := "<%= baseName %>:"+uuid.New().String()
 	configurations = eureka.RegistrationVariables {ServiceRegistryURL:service_registry_url,InstanceId:InstanceId}
 	<%_ } _%>
-	port :=app.Getval("GO_MICRO_SERVICE_PORT")
+	port :=app.GetVal("GO_MICRO_SERVICE_PORT")
 	srv := micro.NewService(
 		micro.Server(mhttp.NewServer()),
     )

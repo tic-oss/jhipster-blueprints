@@ -141,9 +141,6 @@ export default class extends ServerGenerator {
           { src: "gomicro/gomicro/Makefile", dest: "gomicro/Makefile" },
           { src: "gomicro/gomicro/README.md", dest: "gomicro/README.md" },
           { src: "gomicro/gomicro/config", dest: "gomicro/config" },
-          { src: "gomicro/gomicro/app.yaml", dest: "gomicro/app.yaml" },
-          { src: "gomicro/gomicro/prod-config.yaml", dest: "gomicro/prod-config.yaml" },
-          { src: "gomicro/gomicro/dev-config.yaml", dest: "gomicro/dev-config.yaml" }
 
         ];
       

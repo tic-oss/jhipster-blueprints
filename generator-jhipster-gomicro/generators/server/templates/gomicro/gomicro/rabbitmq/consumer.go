@@ -7,7 +7,7 @@ import (
 )
 
 func Consume() {
-    rabbitmqUrl :=app.Getval("GO_MICRO_MESSAGE_BROKER")
+    rabbitmqUrl :=app.GetVal("GO_MICRO_MESSAGE_BROKER")
 	conn,err := amqp.Dial(rabbitmqUrl)
 	if err != nil {
 		logger.Errorf("Failed Initializing Broker Connection")

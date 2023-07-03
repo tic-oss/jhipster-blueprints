@@ -10,28 +10,6 @@ import (
 	"strconv"
 	app "<%= packageName %>/config"
 )
-/**
-Below is the format required by Eureka to register and application instance
-{
-    "instance": {
-        "hostName": "MY_HOSTNAME",
-        "app": "org.github.hellosatish.microservicepattern.awesomeproject",
-        "vipAddress": "org.github.hellosatish.microservicepattern.awesomeproject",
-        "secureVipAddress": "org.github.hellosatish.microservicepattern.awesomeproject"
-        "ipAddr": "10.0.0.10",
-        "status": "STARTING",
-        "port": {"$": "8080", "@enabled": "true"},
-        "securePort": {"$": "8443", "@enabled": "true"},
-        "healthCheckUrl": "http://WKS-SOF-L011:8080/healthcheck",
-        "statusPageUrl": "http://WKS-SOF-L011:8080/status",
-        "homePageUrl": "http://WKS-SOF-L011:8080",
-        "dataCenterInfo": {
-            "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo", 
-            "name": "MyOwn"
-        },
-    }
-}
- */
 
 type AppRegistrationBody struct {
 	Instance InstanceDetails `json:"instance"`
@@ -100,10 +78,10 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 }
 
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
-	httpport := app.Getval("GO_MICRO_SERVICE_PORT")
+	httpport := app.GetVal("GO_MICRO_SERVICE_PORT")
 	hostname := "<%= baseName %>"
 	
-	env :=os.Getenv("GO_MICRO_ENV")
+	env :=os.Getenv("GO_MICRO_PROFILE")
 	if(env=="prod"){
 		//set this as hostname for local environment
 		hostname, _ = os.Hostname()
@@ -114,11 +92,11 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 		logger.Errorf("Enable to find IP address form OS")    	
 	}
 
-    renewalStr := app.Getval("GO_MICRO_RENEWALINTERVALINSEC")
+    renewalStr := app.GetVal("GO_MICRO_RENEWALINTERVALINSEC")
 	var renewal int
 	renewal, _ = strconv.Atoi(renewalStr)
 	
-	durationStr := app.Getval("GO_MICRO_DURATIONINSECS")
+	durationStr := app.GetVal("GO_MICRO_DURATIONINSECS")
   	var duration int
     duration, _ = strconv.Atoi(durationStr)
 
