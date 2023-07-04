@@ -80,7 +80,7 @@ func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs Regis
 func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs RegistrationVariables) *AppRegistrationBody {
 	httpport := app.GetVal("GO_MICRO_SERVICE_PORT")
 	hostname, _ := os.Hostname()
-	
+	applicationName := "<%= baseName %>"
 	env :=os.Getenv("GO_MICRO_ACTIVE_PROFILE")
 	if(env=="prod"){
 		hostname = "<%= baseName %>"
@@ -108,7 +108,7 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
 	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 
-	instance := InstanceDetails{configs.InstanceId, hostname, hostname, hostname, hostname,
+	instance := InstanceDetails{configs.InstanceId, hostname, applicationName, applicationName, applicationName,
 		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo,leaseInfo}
 
 	body := &AppRegistrationBody{instance}

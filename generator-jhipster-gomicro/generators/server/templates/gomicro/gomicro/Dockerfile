@@ -1,14 +1,16 @@
-FROM golang
+FROM golang:1.20-alpine AS build-env
 
+RUN mkdir /app
 WORKDIR /app
 
-COPY go.mod ./
-RUN go mod download
-
 COPY . .
+RUN go mod tidy && go mod download
 
-RUN go mod tidy
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o gomicro
 
 EXPOSE <%= serverPort %>
 
-CMD ["go","run","."]
+FROM scratch
+COPY ./ ./
+COPY --from=build-env /app/gomicro gomicro
+CMD ["./gomicro"]
