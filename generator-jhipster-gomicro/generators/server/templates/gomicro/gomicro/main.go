@@ -74,6 +74,15 @@ func main() {
 	<%_ } _%>
 	r.HandleFunc("/management/health/readiness", func(w http.ResponseWriter, _ *http.Request) {   
 	jsons.NewEncoder(w).Encode(map[string]interface{}{"status": "UP","components":map[string]interface{} {"readinessState": map[string]interface{}{"status": "UP"}}})}).Methods(http.MethodGet)
+	<%_ if (restClient){  _%>
+	r.HandleFunc("/api/services/<%= baseName %>",func(w http.ResponseWriter, _ *http.Request){
+	logger.Infof("response sent")
+	jsons.NewEncoder(w).Encode(map[string]string{"server": "UP"})
+	}).Methods(http.MethodGet)
+	<%_ } _%>	
+	<%_ if (restServer){  _%>
+	r.HandleFunc("/api/services/<%= restServer %>",http.HandlerFunc(eureka.Client)).Methods(http.MethodGet)
+	<%_ } _%>	
 	r.HandleFunc("/hello",func(w http.ResponseWriter, _ *http.Request){
 		jsons.NewEncoder(w).Encode("helloworld")}).Methods(http.MethodGet)
 	r.HandleFunc("/management/health/liveness", func(w http.ResponseWriter, _ *http.Request) {     

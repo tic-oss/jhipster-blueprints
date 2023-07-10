@@ -2,6 +2,7 @@ import chalk from "chalk";
 import yosay from 'yosay';
 import ServerGenerator from "generator-jhipster/generators/server";
 import { askForServerSideOpts } from './prompts.mjs';
+import { loadCommunicationConfigs, findConfigByBaseName } from './server-base.mjs';
 
 export default class extends ServerGenerator {
   constructor(args, opts, features) {
@@ -37,7 +38,8 @@ export default class extends ServerGenerator {
           )
         );
       },
-      askForServerSideOpts
+      askForServerSideOpts,
+      loadCommunicationConfigs
     };
   }
 
@@ -121,6 +123,28 @@ export default class extends ServerGenerator {
   get [ServerGenerator.WRITING]() {
     return {
       writing() {
+        const matchingScenarios= findConfigByBaseName(this.baseName)
+        console.log(matchingScenarios)
+        
+        if (matchingScenarios.length > 0) {
+          var restServer, restClient, rabbitmqServer, rabbitmqClient;
+        
+          for (var options of matchingScenarios) {
+            if (options.framework === 'rest-api') {
+              if (options.server)
+                restServer = options.server;
+              if (options.client)
+                restClient = options.client;
+            } else if (options.framework === 'rabbitmq') {
+              if (options.server)
+                rabbitmqServer = options.server;
+              if (options.client)
+                rabbitmqClient = options.client;
+            }
+          }
+        }
+        
+        console.log("%%%%%%%%%%%%%%",restServer,restClient)
         const templateVariables = {
           serverPort: this.serverPort,
           packageName: this.packageName,
@@ -129,7 +153,11 @@ export default class extends ServerGenerator {
           eureka: this.eureka,
           rabbitmq: this.rabbitmq,
           postgresql: this.postgress,
-          mongodb: this.mongodb
+          mongodb: this.mongodb,
+          restServer:restServer,
+          restClient:restClient,
+          rabbitmqServer:rabbitmqServer,
+          rabbitmqClient:rabbitmqClient
         };
       
         const templatePaths = [
@@ -141,19 +169,20 @@ export default class extends ServerGenerator {
           { src: "gomicro/gomicro/Makefile", dest: "gomicro/Makefile" },
           { src: "gomicro/gomicro/README.md", dest: "gomicro/README.md" },
           { src: "gomicro/gomicro/config", dest: "gomicro/config" },
-
-        ];
-      
+        ]; 
         const conditionalTemplates = [
           { condition: this.auth, src: "gomicro/gomicro/auth", dest: "gomicro/auth" },
           { condition: this.postgress, src: "gomicro/gomicro/handler/db.go", dest: "gomicro/handler/db.go" },
           { condition: this.mongodb, src: "gomicro/gomicro/handler/mongodb.go", dest: "gomicro/handler/mongodb.go" },
           { condition: this.postgress, src: "gomicro/gomicro/db/config.go", dest: "gomicro/db/config.go" },
           { condition: this.mongodb, src: "gomicro/gomicro/db/mongoconfig.go", dest: "gomicro/db/mongoconfig.go" },
-          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry", dest: "gomicro/eurekaregistry" },
+          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/helper", dest: "gomicro/eurekaregistry/helper" },
+          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/DiscoveryManager.go", dest: "gomicro/eurekaregistry/DiscoveryManager.go" },
+          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/RegistrationManager.go", dest: "gomicro/eurekaregistry/RegistrationManager.go" },
+          { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/EurekaRegistrationManager.go", dest: "gomicro/eurekaregistry/EurekaRegistrationManager.go" },
           { condition: this.rabbitmq, src: "gomicro/gomicro/rabbitmq", dest: "gomicro/rabbitmq" },
-        ];
-      
+          { condition: restServer, src: "gomicro/gomicro/eurekaregistry/ServiceDiscovery.go", dest: "gomicro/eurekaregistry/ServiceDiscovery.go" },
+        ];      
         templatePaths.forEach(({ src, dest }) => {
           this.fs.copyTpl(
             this.templatePath(src),
@@ -161,7 +190,6 @@ export default class extends ServerGenerator {
             templateVariables
           );
         });
-      
         conditionalTemplates.forEach(({ condition, src, dest }) => {
           if (condition) {
             this.fs.copyTpl(

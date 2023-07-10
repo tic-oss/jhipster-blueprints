@@ -104,7 +104,7 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	leaseInfo := LeaseInfo{renewal,duration}
 	dataCenterInfo := DataCenterInfo{"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo","MyOwn"}
 
-	homePageUrl := "http://"+hostname+":"+httpport
+	homePageUrl := "http://"+hostname+":"+httpport+"/"
 	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
 	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
 

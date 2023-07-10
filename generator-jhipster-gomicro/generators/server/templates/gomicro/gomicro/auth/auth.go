@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"github.com/Nerzal/gocloak/v13"
 	"encoding/json"
+	"strings"
 	app "<%= packageName %>/config"
 )
 
@@ -34,7 +35,14 @@ func Protect(next http.Handler) http.Handler {
 			json.NewEncoder(w).Encode("Unauthorized")
 			return
 		}
-		accessToken := authHeader
+		authParts := strings.Split(authHeader, " ")
+		if len(authParts) != 2 || authParts[0] != "Bearer" {
+			w.WriteHeader(401)
+			json.NewEncoder(w).Encode("Unauthorized")
+			return
+		}
+		accessToken := authParts[1]
+
 		rptResult, err := client.RetrospectToken(context.TODO(),string(accessToken), clientId,clientSecret, realmName)
 
 		if err != nil {

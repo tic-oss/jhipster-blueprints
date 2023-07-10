@@ -152,7 +152,6 @@ export async function askForServerSideOpts() {
       this.eureka=(this.jhipsterConfigWithDefaults.serviceDiscoveryType=="eureka")
       this.rabbitmq=(this.jhipsterConfigWithDefaults.messageBroker=="rabbitmq")
       this.postgress=(this.jhipsterConfigWithDefaults.prodDatabaseType=="postgresql")
-
       this.mongodb=(this.jhipsterConfigWithDefaults.databaseType=="mongodb")
     return ;
   }
