@@ -49,7 +49,7 @@ type headerTransport struct {
 }
 
 func (t *headerTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	token :="Bearer "+t.Header.Get("Authorization")
+	token := t.Header.Get("Authorization")
 	req.Header.Set("Authorization", token)
 	return t.Transport.RoundTrip(req)
 }

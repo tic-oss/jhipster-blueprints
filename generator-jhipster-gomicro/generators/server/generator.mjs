@@ -142,9 +142,7 @@ export default class extends ServerGenerator {
                 rabbitmqClient = options.client;
             }
           }
-        }
-        
-        console.log("%%%%%%%%%%%%%%",restServer,restClient)
+        }        
         const templateVariables = {
           serverPort: this.serverPort,
           packageName: this.packageName,
