@@ -23,7 +23,8 @@ export function findConfigByBaseName(baseName) {
         type: communication.type,
         framework: communication.framework
       });
-    } else if (communication.server === baseName) {
+    } 
+     if (communication.server === baseName) {
       result.push({
         client: communication.client,
         type: communication.type,

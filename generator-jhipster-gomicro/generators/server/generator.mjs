@@ -124,25 +124,24 @@ export default class extends ServerGenerator {
     return {
       writing() {
         const matchingScenarios= findConfigByBaseName(this.baseName)
-        console.log(matchingScenarios)
-        
+                
         if (matchingScenarios.length > 0) {
-          var restServer, restClient, rabbitmqServer, rabbitmqClient;
+          var restServer=[], restClient, rabbitmqServer=[], rabbitmqClient;
         
           for (var options of matchingScenarios) {
             if (options.framework === 'rest-api') {
               if (options.server)
-                restServer = options.server;
+                restServer.push(options.server);
               if (options.client)
                 restClient = options.client;
             } else if (options.framework === 'rabbitmq') {
               if (options.server)
-                rabbitmqServer = options.server;
+                rabbitmqServer.push(options.server);
               if (options.client)
                 rabbitmqClient = options.client;
             }
           }
-        }        
+        }      
         const templateVariables = {
           serverPort: this.serverPort,
           packageName: this.packageName,
@@ -179,7 +178,7 @@ export default class extends ServerGenerator {
           { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/RegistrationManager.go", dest: "gomicro/eurekaregistry/RegistrationManager.go" },
           { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/EurekaRegistrationManager.go", dest: "gomicro/eurekaregistry/EurekaRegistrationManager.go" },
           { condition: this.rabbitmq, src: "gomicro/gomicro/rabbitmq", dest: "gomicro/rabbitmq" },
-          { condition: restServer, src: "gomicro/gomicro/eurekaregistry/ServiceDiscovery.go", dest: "gomicro/eurekaregistry/ServiceDiscovery.go" },
+          { condition: restServer?.length, src: "gomicro/gomicro/eurekaregistry/ServiceDiscovery.go", dest: "gomicro/eurekaregistry/ServiceDiscovery.go" },
         ];      
         templatePaths.forEach(({ src, dest }) => {
           this.fs.copyTpl(

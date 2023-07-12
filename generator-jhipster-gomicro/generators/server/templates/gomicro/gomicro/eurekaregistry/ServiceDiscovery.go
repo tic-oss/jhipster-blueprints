@@ -9,14 +9,14 @@ import (
 	app "<%= packageName %>/config"
 )
 
-func Client(w http.ResponseWriter, req *http.Request) {
+func Client(w http.ResponseWriter, req *http.Request,restServer string) {
 	uri := app.GetVal("GO_MICRO_SERVICE_REGISTRY_URL")
 	cleanURL := strings.TrimSuffix(uri, "/apps/")
 	client := eureka.NewClient([]string{cleanURL})
-	res, _ := client.GetApplication("<%= restServer %>")
+	res, _ := client.GetApplication(restServer)
 	homePageURL := res.Instances[0].HomePageUrl
 	logger.Infof("HomePageURL: %s", homePageURL)
-	url := homePageURL + "api/services/<%= restServer %>"
+	url := homePageURL + "api/services/"+restServer
 	clientWithAuth := &http.Client{
 		Transport: &headerTransport{
 			Transport: http.DefaultTransport,
