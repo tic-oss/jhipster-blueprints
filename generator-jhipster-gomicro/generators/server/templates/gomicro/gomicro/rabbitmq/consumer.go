@@ -6,9 +6,14 @@ import (
 	app "<%= packageName %>/config"
 )
 
-func Consume() {
+func Consumer<%= rabbitmqServer %>To<%= rabbitmqClient %> () {
     rabbitmqUrl :=app.GetVal("GO_MICRO_MESSAGE_BROKER")
 	conn,err := amqp.Dial(rabbitmqUrl)
+
+	exchangeName := "<%= rabbitmqServer %>To<%= rabbitmqClient %>_message_exchange"
+	routingKey := "<%= rabbitmqServer %>To<%= rabbitmqClient %>_message_routingKey"
+	queueName := "<%= rabbitmqServer %>To<%= rabbitmqClient %>_message_queue"
+	
 	if err != nil {
 		logger.Errorf("Failed Initializing Broker Connection")
 		panic(err)
@@ -20,13 +25,21 @@ func Consume() {
 	defer channel.Close()
 
 	msgs, err := channel.Consume(
-		"TestQueue",
+		queueName,
 		"",
 		true,
 		false,
 		false,
 		false,
 		nil,
+	)
+
+	err = channel.QueueBind(
+		queueName,      
+		routingKey,     
+		exchangeName,   
+		false,         
+		nil,            
 	)
 
 	if err != nil {
