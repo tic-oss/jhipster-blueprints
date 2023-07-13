@@ -126,7 +126,7 @@ export default class extends ServerGenerator {
         const matchingScenarios= findConfigByBaseName(this.baseName)
                 
         if (matchingScenarios.length > 0) {
-          var restServer=[], restClient, rabbitmqServer=[], rabbitmqClient;
+          var restServer=[], restClient, rabbitmqServer=[], rabbitmqClient=[];
         
           for (var options of matchingScenarios) {
             if (options.framework === 'rest-api') {
@@ -138,7 +138,7 @@ export default class extends ServerGenerator {
               if (options.server)
                 rabbitmqServer.push(options.server);
               if (options.client)
-                rabbitmqClient = options.client;
+                rabbitmqClient.push(options.client);
             }
           }
         }      
@@ -196,6 +196,38 @@ export default class extends ServerGenerator {
             );
           }
         });
+        if(rabbitmqServer?.length){
+        for (var i=0;i<rabbitmqServer.length;i++){
+          var server = rabbitmqServer[i].charAt(0).toUpperCase()+rabbitmqServer[i].slice(1)
+          var client = this.baseName.charAt(0).toUpperCase()+this.baseName.slice(1)
+          this.fs.copyTpl(
+            this.templatePath("gomicro/gomicro/rabbitmq/consumer.go"),
+            this.destinationPath("gomicro/rabbitmq/"+"RabbitMQConsumer"+server+"To"+client+".go"),
+            {
+              packageName:this.packageName,
+              rabbitmqServer:server,
+              rabbitmqClient:client,
+              baseName:this.baseName,
+            }
+          );
+        }
+      }
+      if(rabbitmqClient?.length){
+        for (var i=0;i<rabbitmqClient.length;i++){
+          var server = this.baseName.charAt(0).toUpperCase()+this.baseName.slice(1)
+          var client = rabbitmqClient[i].charAt(0).toUpperCase()+rabbitmqClient[i].slice(1)
+          this.fs.copyTpl(
+            this.templatePath("gomicro/gomicro/rabbitmq/producer.go"),
+            this.destinationPath("gomicro/rabbitmq/"+"RabbitMQProducer"+server+"To"+client+".go"),
+            {
+              packageName:this.packageName,
+              rabbitmqClient:client,
+              rabbitmqServer:server,
+              baseName:this.baseName,
+            }
+          );
+        }
+      }
       }
      }
 }

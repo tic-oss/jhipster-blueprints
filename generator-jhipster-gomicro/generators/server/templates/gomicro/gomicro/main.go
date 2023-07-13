@@ -8,7 +8,7 @@ import (
 	"<%= packageName %>/handler"
 	<%_ } _%>
 	"github.com/asim/go-micro/v3"
-	<%_ if (rabbitmq){  _%>
+	<%_ if (rabbitmqClient?.length||rabbitmqServer?.length){  _%>
 	rabbitmq "<%= packageName %>/rabbitmq"
 	<%_ } _%>
 	"github.com/micro/micro/v3/service/logger"
@@ -93,12 +93,19 @@ func main() {
 	<%_ if (eureka){  _%>
 	go eureka.ManageDiscovery(configurations)
 	<%_ } _%>
+	<%_ if (rabbitmqClient?.length){  for(var i=0;i<rabbitmqClient.length;i++){
+		 capitalizedServer=baseName.charAt(0).toUpperCase()+baseName.slice(1)
+		 capitalizedClient=rabbitmqClient[i].charAt(0).toUpperCase()+rabbitmqClient[i].slice(1)
+	_%>
+	rabbitmq.Producer<%= capitalizedServer %>To<%= capitalizedClient %>()
+    <%_ }}_%>
+	<%_ if (rabbitmqServer?.length){ for(var i=0;i<rabbitmqServer.length;i++){ 
+		 capitalizedServer=rabbitmqServer[i].charAt(0).toUpperCase()+rabbitmqServer[i].slice(1)
+		 capitalizedClient=baseName.charAt(0).toUpperCase()+baseName.slice(1)
+	_%>
+	go rabbitmq.Consumer<%= capitalizedServer %>To<%= capitalizedClient %>() 
+	<%_ }} _%>
 
-	<%_ if (rabbitmq){  _%>
-	rabbitmq.Produce() 
-	go rabbitmq.Consume()
-    <%_ } _%>
-	  
     if err := micro.RegisterHandler(srv.Server(), handlers); err != nil {
 		logger.Fatal(err)
 	}

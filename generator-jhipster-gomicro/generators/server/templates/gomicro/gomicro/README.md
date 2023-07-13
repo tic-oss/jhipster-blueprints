@@ -7,13 +7,14 @@
       cd go
       go mod tidy
   ---
-  + First run the postgress,keycloak and jhipster registry files also start rabbitmq server.
+  + First run the postgress or mongodb,keycloak and jhipster if rabbitmq for connection then rabbitmq registry files.
   ---
       cd docker
-      docker-compose -f  postgresql.yml up     
+      docker-compose -f  postgresql.yml up
+      docker-compose -f mongodb.yml up     
       docker-compose -f  keycloak.yml up     
       docker-compose -f  jhipster-registry.yml up   
-      docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+      docker-compose -f rabbitmq.yml up
   ---
 
 
