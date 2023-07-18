@@ -70,5 +70,37 @@ docker run -it --network="host" -p <port_number>:<port_number> \
 
 be
 ```
-    
+
+### Code Formatting 
+
+- Gofmt formats Go programs. It uses tabs for indentation and blanks for alignment. Alignment assumes that an editor is using a fixed-width font.
+
+ Usage:
+ ```
+  gofmt [flags] [path ...]
+  ```
++ Flags
+
+  - d - Do not print reformatted sources to standard output.
+	If a file's formatting is different than gofmt's, print diffs
+	to standard output.
+
+  - e - Print all (including spurious) errors.
+
+  - l - Do not print reformatted sources to standard output.
+	If a file's formatting is different from gofmt's, print its name
+	to standard output.
+
+  - r rule - Apply the rewrite rule to the source before reformatting.
+
+  - s - Try to simplify code (after applying the rewrite rule, if any).
+
+  - w - Do not print reformatted sources to standard output.
+
++ For formatting whole directory 
+
+    ```
+      gofmt  .
+   
+    ```
 
