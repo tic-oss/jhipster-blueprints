@@ -1,31 +1,30 @@
 package auth
 
 import (
+	app "<%= packageName %>/config"
 	"context"
+	"encoding/json"
+	"github.com/Nerzal/gocloak/v13"
 	"github.com/micro/micro/v3/service/logger"
 	"net/http"
-	"github.com/Nerzal/gocloak/v13"
-	"encoding/json"
 	"strings"
-	app "<%= packageName %>/config"
 )
 
 var (
-	client *gocloak.GoCloak
-	clientId string
+	client       *gocloak.GoCloak
+	clientId     string
 	clientSecret string
-	realmName string
-	keycloakUrl string
+	realmName    string
+	keycloakUrl  string
 )
 
 func SetClient() {
-	clientId =app.GetVal("GO_MICRO_CLIENT_ID")
+	clientId = app.GetVal("GO_MICRO_CLIENT_ID")
 	clientSecret = app.GetVal("GO_MICRO_CLIENT_SECRET")
-	realmName =app.GetVal("GO_MICRO_REALM_NAME")
-	keycloakUrl=app.GetVal("GO_MICRO_KEYCLOAK_URL")
+	realmName = app.GetVal("GO_MICRO_REALM_NAME")
+	keycloakUrl = app.GetVal("GO_MICRO_KEYCLOAK_URL")
 	client = gocloak.NewClient(keycloakUrl)
 }
-
 
 func Protect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -43,17 +42,17 @@ func Protect(next http.Handler) http.Handler {
 		}
 		accessToken := authParts[1]
 
-		rptResult, err := client.RetrospectToken(context.TODO(),string(accessToken), clientId,clientSecret, realmName)
+		rptResult, err := client.RetrospectToken(context.TODO(), string(accessToken), clientId, clientSecret, realmName)
 
 		if err != nil {
 			logger.Errorf("Inspection failed: %s", err.Error())
-			return 
+			return
 		}
-		istokenvalid :=*rptResult.Active 
+		istokenvalid := *rptResult.Active
 		if !istokenvalid {
 			logger.Errorf("Token is not active")
-			return 
+			return
 		}
-		next.ServeHTTP(w,r)
+		next.ServeHTTP(w, r)
 	})
 }

@@ -1,22 +1,22 @@
 package eureka
 
 import (
-	"net/http"
-	"io/ioutil"
-	"github.com/micro/micro/v3/service/logger"
-	"github.com/ArthurHlt/go-eureka-client/eureka"
-	"strings"
 	app "<%= packageName %>/config"
+	"github.com/ArthurHlt/go-eureka-client/eureka"
+	"github.com/micro/micro/v3/service/logger"
+	"io/ioutil"
+	"net/http"
+	"strings"
 )
 
-func Client(w http.ResponseWriter, req *http.Request,restServer string) {
+func Client(w http.ResponseWriter, req *http.Request, restServer string) {
 	uri := app.GetVal("GO_MICRO_SERVICE_REGISTRY_URL")
 	cleanURL := strings.TrimSuffix(uri, "/apps/")
 	client := eureka.NewClient([]string{cleanURL})
 	res, _ := client.GetApplication(restServer)
 	homePageURL := res.Instances[0].HomePageUrl
 	logger.Infof("HomePageURL: %s", homePageURL)
-	url := homePageURL + "api/services/"+restServer
+	url := homePageURL + "api/services/" + restServer
 	clientWithAuth := &http.Client{
 		Transport: &headerTransport{
 			Transport: http.DefaultTransport,

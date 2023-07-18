@@ -1,14 +1,14 @@
 package eureka
 
 import (
-	"<%= packageName %>/eurekaregistry/helper"
-	"time"
-	"github.com/carlescere/scheduler"
-	"runtime"
-	"os"
-	"github.com/micro/micro/v3/service/logger"
-	"strconv"
 	app "<%= packageName %>/config"
+	"<%= packageName %>/eurekaregistry/helper"
+	"github.com/carlescere/scheduler"
+	"github.com/micro/micro/v3/service/logger"
+	"os"
+	"runtime"
+	"strconv"
+	"time"
 )
 
 type AppRegistrationBody struct {
@@ -42,8 +42,8 @@ type DataCenterInfo struct {
 }
 
 type LeaseInfo struct {
-    RenewalIntervalInSecs int `json:"renewalIntervalInSecs"`
-    DurationInSecs int `json:"durationInSecs"`
+	RenewalIntervalInSecs int `json:"renewalIntervalInSecs"`
+	DurationInSecs        int `json:"durationInSecs"`
 }
 
 // This struct shall be responsible for manager to manage registration with Eureka
@@ -51,21 +51,21 @@ type EurekaRegistrationManager struct {
 }
 
 func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs RegistrationVariables) {
-	logger.Infof("Registering service with status : STARTING")    
-	body :=  erm.getBodyForEureka("STARTING", eurekaConfigs)    
+	logger.Infof("Registering service with status : STARTING")
+	body := erm.getBodyForEureka("STARTING", eurekaConfigs)
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", body, nil)
-	logger.Infof("Waiting for 10 seconds for application to start properly")    	
+	logger.Infof("Waiting for 10 seconds for application to start properly")
 	time.Sleep(10 * time.Second)
-	logger.Infof("Updating the status to : UP")    	
-	bodyUP :=  erm.getBodyForEureka("UP", eurekaConfigs)
+	logger.Infof("Updating the status to : UP")
+	bodyUP := erm.getBodyForEureka("UP", eurekaConfigs)
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", bodyUP, nil)
 }
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-	logger.Infof("In SendHeartBeat!")    	
+	logger.Infof("In SendHeartBeat!")
 	job := func() {
-		logger.Infof("sending heartbeat : "+ time.Now().UTC().String())    	
-		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL+ "<%= baseName %>/"+eurekaConfigs.InstanceId, nil, nil)
+		logger.Infof("sending heartbeat : " + time.Now().UTC().String())
+		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>/"+eurekaConfigs.InstanceId, nil, nil)
 	}
 	// Run every 5 seconds but not now.
 	scheduler.Every(5).Seconds().Run(job)
@@ -73,7 +73,7 @@ func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVar
 
 }
 func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs RegistrationVariables) {
-	bodyDOWN :=  erm.getBodyForEureka("DOWN", configs)    
+	bodyDOWN := erm.getBodyForEureka("DOWN", configs)
 	helper.MakePostCall(configs.ServiceRegistryURL+"<%= baseName %>", bodyDOWN, nil)
 }
 
@@ -81,35 +81,35 @@ func (erm EurekaRegistrationManager) getBodyForEureka(status string, configs Reg
 	httpport := app.GetVal("GO_MICRO_SERVICE_PORT")
 	hostname, _ := os.Hostname()
 	applicationName := "<%= baseName %>"
-	env :=os.Getenv("GO_MICRO_ACTIVE_PROFILE")
-	if(env=="prod"){
+	env := os.Getenv("GO_MICRO_ACTIVE_PROFILE")
+	if env == "prod" {
 		hostname = "<%= baseName %>"
 	}
 
 	ipAddress, err := helper.ExternalIP()
-	if err != nil{
-		logger.Errorf("Enable to find IP address form OS")    	
+	if err != nil {
+		logger.Errorf("Enable to find IP address form OS")
 	}
 
-    renewalStr := app.GetVal("GO_MICRO_RENEWALINTERVALINSEC")
+	renewalStr := app.GetVal("GO_MICRO_RENEWALINTERVALINSEC")
 	var renewal int
 	renewal, _ = strconv.Atoi(renewalStr)
-	
+
 	durationStr := app.GetVal("GO_MICRO_DURATIONINSECS")
-  	var duration int
-    duration, _ = strconv.Atoi(durationStr)
+	var duration int
+	duration, _ = strconv.Atoi(durationStr)
 
-	port := Port{httpport,"true"}
-	securePort := Port{"8443","false"}
-	leaseInfo := LeaseInfo{renewal,duration}
-	dataCenterInfo := DataCenterInfo{"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo","MyOwn"}
+	port := Port{httpport, "true"}
+	securePort := Port{"8443", "false"}
+	leaseInfo := LeaseInfo{renewal, duration}
+	dataCenterInfo := DataCenterInfo{"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo", "MyOwn"}
 
-	homePageUrl := "http://"+hostname+":"+httpport+"/"
-	statusPageUrl := "http://"+hostname+":"+httpport+"/status"
-	healthCheckUrl := "http://"+hostname+":"+httpport+"/healthcheck"
+	homePageUrl := "http://" + hostname + ":" + httpport + "/"
+	statusPageUrl := "http://" + hostname + ":" + httpport + "/status"
+	healthCheckUrl := "http://" + hostname + ":" + httpport + "/healthcheck"
 
 	instance := InstanceDetails{configs.InstanceId, hostname, applicationName, applicationName, applicationName,
-		ipAddress,status , port,securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo,leaseInfo}
+		ipAddress, status, port, securePort, healthCheckUrl, statusPageUrl, homePageUrl, dataCenterInfo, leaseInfo}
 
 	body := &AppRegistrationBody{instance}
 	return body

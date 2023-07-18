@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"net"
 	"errors"
+	"net"
 )
 
 func ExternalIP() (string, error) {

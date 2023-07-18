@@ -31,7 +31,7 @@ func Producer<%= rabbitmqServer %>To<%= rabbitmqClient %>() {
 
 		err = channel.ExchangeDeclare(
 			exchangeName, 
-			"direct",    
+			"topic",    
 			true,       
 			false,    
 			false,     
@@ -44,7 +44,7 @@ func Producer<%= rabbitmqServer %>To<%= rabbitmqClient %>() {
 
 		_, err = channel.QueueDeclare(
 			queueName, 
-			false,     
+			true,     
 			false,    
 			false,    
 			false,    

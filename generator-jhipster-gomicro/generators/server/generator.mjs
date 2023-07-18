@@ -130,15 +130,20 @@ export default class extends ServerGenerator {
         
           for (var options of matchingScenarios) {
             if (options.framework === 'rest-api') {
-              if (options.server)
+                if (options.server){
                 restServer.push(options.server);
-              if (options.client)
+                }
+                if (options.client){
                 restClient = options.client;
-            } else if (options.framework === 'rabbitmq') {
-              if (options.server)
-                rabbitmqServer.push(options.server);
-              if (options.client)
-                rabbitmqClient.push(options.client);
+                }
+            } 
+            else if (options.framework === 'rabbitmq') {
+                if (options.server){
+                  rabbitmqServer.push(options.server);
+                }
+                if (options.client){
+                  rabbitmqClient.push(options.client);
+                }
             }
           }
         }      
@@ -166,6 +171,7 @@ export default class extends ServerGenerator {
           { src: "gomicro/gomicro/Makefile", dest: "gomicro/Makefile" },
           { src: "gomicro/gomicro/README.md", dest: "gomicro/README.md" },
           { src: "gomicro/gomicro/config", dest: "gomicro/config" },
+          { src: "gomicro/gomicro/controllers", dest: "gomicro/controllers" },
         ]; 
         const conditionalTemplates = [
           { condition: this.auth, src: "gomicro/gomicro/auth", dest: "gomicro/auth" },
