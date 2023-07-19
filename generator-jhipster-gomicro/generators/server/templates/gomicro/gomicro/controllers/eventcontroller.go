@@ -11,6 +11,10 @@ import (
 	<%_ if (postgresql||mongodb){  _%>
 	"<%= packageName %>/handler"
 	<%_ } _%>
+	<%_ if (restClient){  _%>
+	"github.com/micro/micro/v3/service/logger"
+	<%_ } _%>
+
 )
 
 type EventController struct {
