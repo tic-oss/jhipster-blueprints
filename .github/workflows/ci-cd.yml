@@ -2,7 +2,6 @@ name: Trigger WDA Action
 
 # Controls when the workflow will run
 on:
-  workflow_dispatch:
   # Triggers the workflow on push event but only for the branch specified with in []
   push:
     branches: [ feature/enable_CI-CD ]
