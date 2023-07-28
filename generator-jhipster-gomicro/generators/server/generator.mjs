@@ -185,6 +185,7 @@ export default class extends ServerGenerator {
           { condition: this.eureka, src: "gomicro/gomicro/eurekaregistry/EurekaRegistrationManager.go", dest: "gomicro/eurekaregistry/EurekaRegistrationManager.go" },
           { condition: this.rabbitmq, src: "gomicro/gomicro/rabbitmq", dest: "gomicro/rabbitmq" },
           { condition: restServer?.length, src: "gomicro/gomicro/eurekaregistry/ServiceDiscovery.go", dest: "gomicro/eurekaregistry/ServiceDiscovery.go" },
+          { condition: this.postgress, src: "gomicro/gomicro/migrate", dest: "gomicro/migrate" },        
         ];      
         templatePaths.forEach(({ src, dest }) => {
           this.fs.copyTpl(

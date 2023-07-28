@@ -17,6 +17,9 @@ import (
 	<%_ if (postgresql||mongodb){  _%>
 	"<%= packageName %>/handler"
 	<%_ } _%>
+	<%_ if (postgresql){  _%>	
+	"<%= packageName %>/migrate"
+	<%_ } _%>
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"net/http"
 	mhttp "github.com/go-micro/plugins/v3/server/http"
@@ -33,6 +36,9 @@ func main() {
 	defer cleanup()
 	<%_ } _%>
 	app.Setconfig()
+	<%_ if (postgresql){  _%>
+	migrate.MigrateAndCreateDatabase()
+	<%_ } _%>
 	<%_ if (auth){  _%>
 	auth.SetClient()
 	<%_ } _%>

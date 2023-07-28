@@ -63,3 +63,13 @@ func GetVal(key string) string {
 	f := reflect.Indirect(r).FieldByName(key)
 	return string(f.String())
 }
+
+func SetVal(key, value string) {
+	r := reflect.ValueOf(&cfg).Elem()
+	f := r.FieldByName(key)
+	if f.IsValid() && f.CanSet() {
+		f.SetString(value)
+	} else {
+		logger.Errorf("Invalid or unsettable field: %s", key)
+	}
+}
