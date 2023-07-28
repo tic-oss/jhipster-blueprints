@@ -12,7 +12,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-func generateurl(databaseUrl, defaultDatabaseName, newDatabaseName string) string {
+func generateUrl(databaseUrl, defaultDatabaseName, newDatabaseName string) string {
 	return func() string {
 		if lastIndex := strings.LastIndex(databaseUrl, defaultDatabaseName); lastIndex != -1 {
 			return databaseUrl[:lastIndex] + newDatabaseName + databaseUrl[lastIndex+len(defaultDatabaseName):]
@@ -50,16 +50,16 @@ func MigrateAndCreateDatabase() {
 		} else {
 			logger.Infof("Database already exists.")
 		}
-		newUrl =generateurl(dsn,"postgres",dbName)
+		newUrl =generateUrl(dsn,"postgres",dbName)
 		app.SetVal("GO_MICRO_DB_URL",newUrl)
 	}
-	m, err := migrate.New(
+	migrator, err := migrate.New(
 		"file://migrate/migration",
 		newUrl)
 	if err != nil {
 			logger.Errorf(err.Error())
 	}
-	if err := m.Up(); err != nil {
+	if err := migrator.Up(); err != nil {
 			logger.Errorf(err.Error())
 	}
 }
