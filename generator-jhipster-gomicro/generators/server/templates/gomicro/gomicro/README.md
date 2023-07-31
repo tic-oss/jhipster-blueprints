@@ -1,5 +1,109 @@
 # Go Application
 
+Prerequisites: *Go, Node, Docker*
+
+Installation: `npm install -g generator-jhipster`
+
+Link: 
+
+ `git clone https://github.com/tic-oss/jhipster-blueprints.git ` 
+
+ `cd generator-jhipster-gomicro`
+
+  `npm link generator-jhipster-gomicro`
+
+A Sample microservices application can be generated using the provided jdl: `jhipster jdl reminder.jdl`
+
+reminder.jdl
+
+---
+<pre>
+   application {
+    config {
+      baseName gomicro,
+      applicationType microservice,
+      packageName com.cmi.tic,
+      authenticationType oauth2,
+      databaseType sql,
+      prodDatabaseType postgresql,
+      devDatabaseType postgresql,
+      serviceDiscoveryType eureka,
+      blueprints [gomicro],
+      serverPort 9002,
+    } 
+}
+ </pre>
+---
+
+Below is the directory structure once application code is generated.
+
+```
+.
+├── be1 (backend microservice 1)
+│   └── gomicro   ├── README.md
+                  <%_ if (auth){  _%>
+│                 ├── auth
+                  <%_ } _%>
+│                 ├── config
+│                 ├── controllers
+                  <%_ if (postgresql || mongodb){  _%>
+│                 ├── db
+                  <%_ } _%>
+              	  <%_ if (eureka){  _%>
+│                 ├── eurekaregistry
+                  <%_ } _%>
+                  <%_ if (postgresql || mongodb){  _%>
+│                 ├── handler
+                  <%_ } _%>
+│                 ├── migrate
+│                 ├── proto
+               <%_ if (rabbitmqClient?.length||rabbitmqServer?.length){  _%>
+│                 ├── rabbitmq
+                  <%_ } _%>
+│                 ├── main.go
+|                 ├── go.mod
+|                 └── Dockerfile
+├── docker-compose (docker compose for all microservices and their dependencies)
+│   ├── README-DOCKER-COMPOSE.md
+│   ├── central-server-config
+│   ├── docker-compose.yml
+│   └── realm-config
+└── reminder.jdl
+```
+
+The generated application also includes keycloak, jhipster registry (based on eureka), postgres mongodb rabbitmq  server specific to each service.
+
+ ## Intro on the services provided 
+    <%_ if (auth){  _%>
+    - auth - The authorization is supported by  [Keycloak](https://www.keycloak.org).Here The token is fetched from the header and retrospection is done for the validity of the token if the token is valid the api is hit on the contrary an error is returned.
+    <%_ } _%>
+
+    - config - Next for the config there are multiple environments available initially the app.yml configuration is loaded then based on the env the particular env specific file is loaded and finally the env variables are overided thus on the same structure multiple values will be overriden.
+
+    - controllers -  Implemented by [mux](https://github.com/gorilla/mux).Here the list of api calls and their respective functionalities are written where whena specific api hit what function must be called.
+
+    <%_ if (postgresql || mongodb){  _%>
+    - db - Here the link is made to the database and the application and specific client is returned as an output.
+    <%_ } _%>
+
+    <%_ if (eureka){  _%>
+    - eureka registry - This file contains the code for Registering the service with eureka Service registry with the configurations.
+    <%_ } _%>
+ 
+    <%_ if (postgresql || mongodb){  _%>
+    - handler - Here the logic for the api calls of the controller is present for the db queries,CRUD operations.
+    <%_ } _%>
+
+    - migrate - Implemented by [gomigrate](https://github.com/golang-migrate/migrate).This is for the database versioning in golang.Here the database is created with the application basename and the scripts are run to create table along with schema and insert few data.
+
+    <%_ if (rabbitmqClient?.length||rabbitmqServer?.length){  _%>
+    - rabbitmq - This file consists of files of consumer and producer for asynchronous communication i.e, for sending data and recieving data from the queue.
+    <%_ } _%>
+
+    - Dockerfile - To build an image of the microservice.
+
+    - main.go - The source file from where the application starts.
+
  ## To run the golang application generated
 
   + Build the go application 
@@ -28,31 +132,15 @@
 
   ---
 
-
-  + Create a .env file in the go sub directory 
-  ---
-    ### .env file sample  
-    - GO_MICRO_SERVICE_PORT= <port_number>
-    - GO_MICRO_SERVICE_REGISTRY_URL=http://admin:admin@localhost:8761/eureka 
-    - GO_MICRO_KEYCLOAK_URL=http://localhost:9080
-    - GO_MICRO_CLIENT_ID=internal
-    - GO_MICRO_CLIENT_SECRET=internal
-    - GO_MICRO_REALM_NAME=jhipster
-    + (DB_URL based on selection of Db)
-    - GO_MICRO_DB_URL=postgresql://go@localhost:5433/postgres
-    - GO_MICRO_MONGODB_URL: mongodb://localhost:27017
-    - GO_MICRO_MESSAGE_BROKER=amqp://guest:guest@localhost:5672
----
-
   + Now get back to the root directory of go and start the golang service 
-
+  ---
       go run .
   ---
   
 ## Build an image 
-   ---
-       docker build -t image_name .
-   ---
+---
+    docker build -t image_name .
+---
 ### Run by passing values 
 - docker run -it --network="host" -p <port_number>:<port_number> -e        db_url=postgresql://go@localhost:5433/postgres image_name 
 
@@ -101,6 +189,5 @@ be
 
     ```
       gofmt  .
-   
     ```
 
