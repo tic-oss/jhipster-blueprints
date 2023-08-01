@@ -33,6 +33,8 @@ func (t EventController) RegisterRoutes(r *mux.Router) {
 	<%_ if (restClient){  _%>
 	r.HandleFunc("/api/services/<%= baseName %>",func(w http.ResponseWriter, _ *http.Request){
 	logger.Infof("response sent")
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"server": "UP"})
 	}).Methods(http.MethodGet)
 	<%_ } _%>	
