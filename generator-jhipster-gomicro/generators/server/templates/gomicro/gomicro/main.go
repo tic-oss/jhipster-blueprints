@@ -90,11 +90,13 @@ func main() {
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)
 	}
-}							
+}
 
+<%_ if (eureka){  _%>
 func cleanup(){
 	eureka.Cleanup(configurations)
 }
+<%_ } _%>
 
 func registerRoutes(router *mux.Router) {
 	registerControllerRoutes(controllers.EventController{}, router)
