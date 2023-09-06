@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 RUN go mod tidy && go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o gomicro
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gomicro
 
 EXPOSE <%= serverPort %>
 
