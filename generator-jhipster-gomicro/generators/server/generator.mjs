@@ -11,7 +11,7 @@ export default class extends ServerGenerator {
     if (this.options.help) return;
 
     if (!this.options.jhipsterContext) {
-      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints test')}`);
+      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints gomicro')}`);
     }
   }
 
@@ -203,46 +203,46 @@ export default class extends ServerGenerator {
         };
 
         const templatePaths = [
-          { src: 'gomicro/docker', dest: 'docker' },
-          { src: 'gomicro/gomicro/proto', dest: 'gomicro/proto' },
-          { src: 'gomicro/gomicro/go.mod', dest: 'gomicro/go.mod' },
-          { src: 'gomicro/gomicro/main.go', dest: 'gomicro/main.go' },
-          { src: 'gomicro/gomicro/Dockerfile', dest: 'gomicro/Dockerfile' },
-          { src: 'gomicro/gomicro/Makefile', dest: 'gomicro/Makefile' },
-          { src: 'gomicro/gomicro/README.md', dest: 'gomicro/README.md' },
-          { src: 'gomicro/gomicro/config', dest: 'gomicro/config' },
-          { src: 'gomicro/gomicro/resources', dest: 'gomicro/resources' },
-          { src: 'gomicro/gomicro/controllers', dest: 'gomicro/controllers' },
+          { src: 'docker', dest: 'docker' },
+          { src: 'proto', dest: 'proto' },
+          { src: 'go.mod', dest: 'go.mod' },
+          { src: 'main.go', dest: 'main.go' },
+          { src: 'Dockerfile', dest: 'Dockerfile' },
+          { src: 'Makefile', dest: 'Makefile' },
+          { src: 'ReadMe.md', dest: 'ReadMe.md' },
+          { src: 'config', dest: 'config' },
+          { src: 'resources', dest: 'resources' },
+          { src: 'controllers', dest: 'controllers' },
         ];
         const conditionalTemplates = [
-          { condition: this.auth, src: 'gomicro/gomicro/auth', dest: 'gomicro/auth' },
-          { condition: this.postgress, src: 'gomicro/gomicro/handler/db.go', dest: 'gomicro/handler/db.go' },
-          { condition: this.mongodb, src: 'gomicro/gomicro/handler/mongodb.go', dest: 'gomicro/handler/mongodb.go' },
-          { condition: this.postgress, src: 'gomicro/gomicro/db/config.go', dest: 'gomicro/db/config.go' },
-          { condition: this.mongodb, src: 'gomicro/gomicro/db/mongoconfig.go', dest: 'gomicro/db/mongoconfig.go' },
-          { condition: this.eureka, src: 'gomicro/gomicro/eurekaregistry/helper', dest: 'gomicro/eurekaregistry/helper' },
+          { condition: this.auth, src: 'auth', dest: 'auth' },
+          { condition: this.postgress, src: 'handler/db.go', dest: 'handler/db.go' },
+          { condition: this.mongodb, src: 'handler/mongodb.go', dest: 'handler/mongodb.go' },
+          { condition: this.postgress, src: 'db/config.go', dest: 'db/config.go' },
+          { condition: this.mongodb, src: 'db/mongoconfig.go', dest: 'db/mongoconfig.go' },
+          { condition: this.eureka, src: 'eurekaregistry/helper', dest: 'eurekaregistry/helper' },
           {
             condition: this.eureka,
-            src: 'gomicro/gomicro/eurekaregistry/DiscoveryManager.go',
-            dest: 'gomicro/eurekaregistry/DiscoveryManager.go',
+            src: 'eurekaregistry/DiscoveryManager.go',
+            dest: 'eurekaregistry/DiscoveryManager.go',
           },
           {
             condition: this.eureka,
-            src: 'gomicro/gomicro/eurekaregistry/RegistrationManager.go',
-            dest: 'gomicro/eurekaregistry/RegistrationManager.go',
+            src: 'eurekaregistry/RegistrationManager.go',
+            dest: 'eurekaregistry/RegistrationManager.go',
           },
           {
             condition: this.eureka,
-            src: 'gomicro/gomicro/eurekaregistry/EurekaRegistrationManager.go',
-            dest: 'gomicro/eurekaregistry/EurekaRegistrationManager.go',
+            src: 'eurekaregistry/EurekaRegistrationManager.go',
+            dest: 'eurekaregistry/EurekaRegistrationManager.go',
           },
-          { condition: this.rabbitmq, src: 'gomicro/gomicro/rabbitmq', dest: 'gomicro/rabbitmq' },
+          { condition: this.rabbitmq, src: 'rabbitmq', dest: 'rabbitmq' },
           {
             condition: restServer?.length,
-            src: 'gomicro/gomicro/eurekaregistry/ServiceDiscovery.go',
-            dest: 'gomicro/eurekaregistry/ServiceDiscovery.go',
+            src: 'eurekaregistry/ServiceDiscovery.go',
+            dest: 'eurekaregistry/ServiceDiscovery.go',
           },
-          { condition: this.postgress, src: 'gomicro/gomicro/migrate', dest: 'gomicro/migrate' },
+          { condition: this.postgress, src: 'migrate', dest: 'migrate' },
         ];
         templatePaths.forEach(({ src, dest }) => {
           this.fs.copyTpl(this.templatePath(src), this.destinationPath(dest), templateVariables);
@@ -257,8 +257,8 @@ export default class extends ServerGenerator {
             var server = rabbitmqServer[i].charAt(0).toUpperCase() + rabbitmqServer[i].slice(1);
             var client = this.baseName.charAt(0).toUpperCase() + this.baseName.slice(1);
             this.fs.copyTpl(
-              this.templatePath('gomicro/gomicro/rabbitmq/consumer.go'),
-              this.destinationPath('gomicro/rabbitmq/' + 'RabbitMQConsumer' + server + 'To' + client + '.go'),
+              this.templatePath('rabbitmq/consumer.go'),
+              this.destinationPath('rabbitmq/' + 'RabbitMQConsumer' + server + 'To' + client + '.go'),
               {
                 packageName: this.packageName,
                 rabbitmqServer: server,
@@ -273,8 +273,8 @@ export default class extends ServerGenerator {
             var server = this.baseName.charAt(0).toUpperCase() + this.baseName.slice(1);
             var client = rabbitmqClient[i].charAt(0).toUpperCase() + rabbitmqClient[i].slice(1);
             this.fs.copyTpl(
-              this.templatePath('gomicro/gomicro/rabbitmq/producer.go'),
-              this.destinationPath('gomicro/rabbitmq/' + 'RabbitMQProducer' + server + 'To' + client + '.go'),
+              this.templatePath('rabbitmq/producer.go'),
+              this.destinationPath('rabbitmq/' + 'RabbitMQProducer' + server + 'To' + client + '.go'),
               {
                 packageName: this.packageName,
                 rabbitmqClient: client,

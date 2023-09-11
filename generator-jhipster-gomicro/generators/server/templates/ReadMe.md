@@ -42,36 +42,34 @@ Below is the directory structure once application code is generated.
 ```
 .
 ├── be1 (backend microservice 1)
-│   └── gomicro   ├── README.md
-                  <%_ if (auth){  _%>
-│                 ├── auth
-                  <%_ } _%>
-│                 ├── config
-│                 ├── controllers
-                  <%_ if (postgresql || mongodb){  _%>
-│                 ├── db
-                  <%_ } _%>
-              	  <%_ if (eureka){  _%>
-│                 ├── eurekaregistry
-                  <%_ } _%>
-                  <%_ if (postgresql || mongodb){  _%>
-│                 ├── handler
-                  <%_ } _%>
-│                 ├── migrate
-│                 ├── proto
-│                 ├── resources
-               <%_ if (rabbitmqClient?.length||rabbitmqServer?.length){  _%>
-│                 ├── rabbitmq
-                  <%_ } _%>
-│                 ├── main.go
-|                 ├── go.mod
-|                 └── Dockerfile
-├── docker-compose (docker compose for all microservices and their dependencies)
-│   ├── README-DOCKER-COMPOSE.md
+│   ├── README.md
+    <%_ if (auth){  _%>
+│   ├── auth
+    <%_ } _%>
+│   ├── config
+│   ├── controllers
+    <%_ if (postgresql || mongodb){  _%>
+│   ├── db
+    <%_ } _%>
+    <%_ if (eureka){  _%>
+│   ├── eurekaregistry
+    <%_ } _%>
+    <%_ if (postgresql || mongodb){  _%>
+│   ├── handler
+    <%_ } _%>
+│   ├── migrate
+│   ├── proto
+│   ├── resources
+    <%_ if (rabbitmqClient?.length||rabbitmqServer?.length){  _%>
+│   ├── rabbitmq
+    <%_ } _%>
+│   ├── main.go
+|   ├── go.mod
+|   ├── Dockerfile
+|   ├── docker-compose (docker compose for all microservices and their dependencies)
 │   ├── central-server-config
 │   ├── docker-compose.yml
-│   └── realm-config
-└── reminder.jdl
+└── └── realm-config
 ```
 
 The generated application also includes keycloak, jhipster registry (based on eureka), postgres mongodb rabbitmq server specific to each service.

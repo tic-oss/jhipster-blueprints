@@ -52,9 +52,9 @@ func Protect(next http.Handler) http.Handler {
 		}
 		istokenvalid := *rptResult.Active
 		if !istokenvalid {
-			logger.Errorf("Token is not active")
+			logger.Errorf("Token expired")
 			w.WriteHeader(401)
-			json.NewEncoder(w).Encode("Token is not active")
+			json.NewEncoder(w).Encode("Token expired")
 			return
 		}
 		next.ServeHTTP(w, r)

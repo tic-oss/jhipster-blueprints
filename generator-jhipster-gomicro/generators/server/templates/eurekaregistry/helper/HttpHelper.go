@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/micro/micro/v3/service/logger"
 	"net/http"
+	"fmt"
 	"time"
 )
 
@@ -14,6 +15,8 @@ type OperationBody interface {
 
 // MakePostCall
 func MakePostCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
+	msg := fmt.Sprintf("In MakePostCall to %s with body %s", urlToPost, body)
+	logger.Infof(msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    10 * time.Second,
@@ -46,6 +49,8 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
 }
 
 func MakePutCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
+	msg := fmt.Sprintf("In MakePutCall to %s ", urlToPost)
+	logger.Infof(msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    10 * time.Second,
