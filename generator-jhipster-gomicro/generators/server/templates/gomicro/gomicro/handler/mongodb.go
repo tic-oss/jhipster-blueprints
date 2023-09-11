@@ -12,18 +12,18 @@ import (
 	"net/http"
 )
 
-var instance *mongo.Client
+var mongoClient *mongo.Client
 var event pb.Event
 
 func InitializeMongoDb() {
-	instance = config.GetInstance()
+	mongoClient = config.GetInstance()
 }
 
 func AddEvent(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	_ = json.NewDecoder(request.Body).Decode(&event)
 	logger.Infof("%v", event)
-	collection := instance.Database("temp").Collection("events")
+	collection := mongoClient.Database("<%= baseName %>").Collection("events")
 	result, err := collection.InsertOne(context.Background(), event)
 	if err != nil {
 		logger.Errorf(err.Error())
@@ -40,7 +40,7 @@ func ReadEventById(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	params := mux.Vars(request)
 	id := params["id"]
-	collection := instance.Database("temp").Collection("events")
+	collection := mongoClient.Database("<%= baseName %>").Collection("events")
 	err := collection.FindOne(context.Background(), bson.M{"id": id}).Decode(&event)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -55,7 +55,7 @@ func ReadEventById(response http.ResponseWriter, request *http.Request) {
 func GetEvents(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var events []pb.Event
-	collection := instance.Database("temp").Collection("events")
+	collection := mongoClient.Database("<%= baseName %>").Collection("events")
 	cursor, err := collection.Find(context.Background(), bson.M{})
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -80,13 +80,15 @@ func GetEvents(response http.ResponseWriter, request *http.Request) {
 
 func UpdateEvent(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
-	collection := instance.Database("temp").Collection("events")
+	collection := mongoClient.Database("<%= baseName %>").Collection("events")
 	_ = json.NewDecoder(request.Body).Decode(&event)
 	filter := bson.D{{Key: "id", Value: event.Id}}
 	result, err := collection.ReplaceOne(context.Background(), filter, event)
 	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		logger.Errorf(err.Error())
-		panic(err)
+		return
 	}
 	logger.Infof("Updated Event With Id:" + event.Id)
 	json.NewEncoder(response).Encode(result)
@@ -96,12 +98,14 @@ func DeleteEvent(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	params := mux.Vars(request)
 	id := params["id"]
-	collection := instance.Database("temp").Collection("events")
+	collection := mongoClient.Database("<%= baseName %>").Collection("events")
 	filter := bson.D{{Key: "id", Value: id}}
 	result, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		logger.Errorf(err.Error())
-		panic(err)
+		return
 	}
 	logger.Infof("Deleted Event With Id:" + id)
 	json.NewEncoder(response).Encode(result)

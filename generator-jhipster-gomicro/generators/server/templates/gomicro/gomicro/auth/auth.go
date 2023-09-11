@@ -46,11 +46,15 @@ func Protect(next http.Handler) http.Handler {
 
 		if err != nil {
 			logger.Errorf("Inspection failed: %s", err.Error())
+			w.WriteHeader(401)
+			json.NewEncoder(w).Encode(err.Error())
 			return
 		}
 		istokenvalid := *rptResult.Active
 		if !istokenvalid {
 			logger.Errorf("Token is not active")
+			w.WriteHeader(401)
+			json.NewEncoder(w).Encode("Token is not active")
 			return
 		}
 		next.ServeHTTP(w, r)

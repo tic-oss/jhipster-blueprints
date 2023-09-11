@@ -15,8 +15,8 @@ func GetClient() *gorm.DB {
 	db_url := app.GetVal("GO_MICRO_DB_URL")
 	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
 		logger.Errorf("failed to connect database")
+		return nil
 	}
 	logger.Infof("Database connected")
 	db.Exec(fmt.Sprintf(stmt, tableName))

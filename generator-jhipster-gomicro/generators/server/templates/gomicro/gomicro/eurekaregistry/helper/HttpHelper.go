@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/micro/micro/v3/service/logger"
 	"net/http"
 	"time"
@@ -15,8 +14,6 @@ type OperationBody interface {
 
 // MakePostCall
 func MakePostCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
-	msg := fmt.Sprintf("In MakePostCall to %s with body %s", urlToPost, body)
-	logger.Infof(msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    10 * time.Second,
@@ -28,7 +25,6 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
 	if err != nil {
 		logger.Errorf("error while encoding " + err.Error())
 	}
-	msg = fmt.Sprintf("Request body  %+v", buffer.String())
 	client := &http.Client{Transport: tr}
 	req, err := http.NewRequest(http.MethodPost, urlToPost, &buffer)
 	if err != nil {
@@ -46,13 +42,10 @@ func MakePostCall(urlToPost string, body OperationBody, headers map[string]strin
 		logger.Errorf("Error while making post call " + err.Error())
 		return errors.New("Error while making post call " + err.Error()), nil
 	}
-	logger.Infof("Successfull POST call with HTTP Status : " + resp.Status)
 	return nil, resp
 }
 
 func MakePutCall(urlToPost string, body OperationBody, headers map[string]string) (error, *http.Response) {
-	msg := fmt.Sprintf("In MakePostCall to %s with body %s", urlToPost, body)
-	logger.Infof(msg)
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    10 * time.Second,
@@ -67,8 +60,6 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 		if err != nil {
 			logger.Errorf("error while encoding " + err.Error())
 		}
-		msg = fmt.Sprintf("Prepared Request body  %+v", buffer.String())
-		logger.Infof(msg)
 	}
 
 	client := &http.Client{Transport: tr}
@@ -88,6 +79,5 @@ func MakePutCall(urlToPost string, body OperationBody, headers map[string]string
 		logger.Errorf("Error while making PUT call " + err.Error())
 		return errors.New("Error while making PUT call " + err.Error()), nil
 	}
-	logger.Infof("PUT call Successfull with HTTP Status : " + resp.Status)
 	return nil, resp
 }

@@ -15,7 +15,6 @@ func Client(w http.ResponseWriter, req *http.Request, restServer string) {
 	client := eureka.NewClient([]string{cleanURL})
 	res, _ := client.GetApplication(restServer)
 	homePageURL := res.Instances[0].HomePageUrl
-	logger.Infof("HomePageURL: %s", homePageURL)
 	url := homePageURL + "api/services/" + restServer
 	clientWithAuth := &http.Client{
 		Transport: &headerTransport{

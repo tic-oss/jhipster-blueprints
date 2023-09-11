@@ -11,17 +11,17 @@ import (
 )
 
 var tableName = "event"
-var client *gorm.DB
+var dbClient *gorm.DB
 
 func InitializeDb() {
-	client = config.GetClient()
+	dbClient = config.GetClient()
 }
 
 func AddEvent(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var event *pb.Event
 	_ = json.NewDecoder(request.Body).Decode(&event)
-	e := client.Table(tableName).Create(&event)
+	e := dbClient.Table(tableName).Create(&event)
 	if e.Error != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + e.Error.Error() + `" }`))
@@ -37,7 +37,7 @@ func ReadEventById(response http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 	var event *pb.Event
-	e := client.Table(tableName).First(&event, id)
+	e := dbClient.Table(tableName).First(&event, id)
 	if e.Error != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + e.Error.Error() + `" }`))
@@ -50,7 +50,7 @@ func ReadEventById(response http.ResponseWriter, r *http.Request) {
 func GetEvents(response http.ResponseWriter, r *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var events []*pb.Event
-	e := client.Table(tableName).Find(&events)
+	e := dbClient.Table(tableName).Find(&events)
 	if e.Error != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + e.Error.Error() + `" }`))
@@ -65,8 +65,8 @@ func UpdateEvent(response http.ResponseWriter, request *http.Request) {
 	var event *pb.Event
 	var ev *pb.Event
 	_ = json.NewDecoder(request.Body).Decode(&event)
-	client.Table(tableName).First(&ev, event.Id)
-	client.Table(tableName).Model(&ev).Updates(event)
+	dbClient.Table(tableName).First(&ev, event.Id)
+	dbClient.Table(tableName).Model(&ev).Updates(event)
 	logger.Infof("Updated Event with Id:" + event.Id)
 	json.NewEncoder(response).Encode("Updated Event with Id:" + event.Id)
 }
@@ -76,7 +76,7 @@ func DeleteEvent(response http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	var event *pb.Event
 	id := params["id"]
-	result := client.Table(tableName).Where("id = ?", id).Delete(&event)
+	result := dbClient.Table(tableName).Where("id = ?", id).Delete(&event)
 	if result.RowsAffected == 0 {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`Unable to delete Please Verify`))

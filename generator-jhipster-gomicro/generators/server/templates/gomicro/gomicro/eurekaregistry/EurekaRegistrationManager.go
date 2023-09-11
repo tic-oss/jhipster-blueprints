@@ -51,26 +51,21 @@ type EurekaRegistrationManager struct {
 }
 
 func (erm EurekaRegistrationManager) RegisterWithSerivceRegistry(eurekaConfigs RegistrationVariables) {
-	logger.Infof("Registering service with status : STARTING")
 	body := erm.getBodyForEureka("STARTING", eurekaConfigs)
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", body, nil)
-	logger.Infof("Waiting for 10 seconds for application to start properly")
 	time.Sleep(10 * time.Second)
-	logger.Infof("Updating the status to : UP")
 	bodyUP := erm.getBodyForEureka("UP", eurekaConfigs)
 	helper.MakePostCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>", bodyUP, nil)
 }
 
 func (erm EurekaRegistrationManager) SendHeartBeat(eurekaConfigs RegistrationVariables) {
-	logger.Infof("In SendHeartBeat!")
+	logger.Infof("Sending HeartBeat")
 	job := func() {
-		logger.Infof("sending heartbeat : " + time.Now().UTC().String())
 		helper.MakePutCall(eurekaConfigs.ServiceRegistryURL+"<%= baseName %>/"+eurekaConfigs.InstanceId, nil, nil)
 	}
 	// Run every 5 seconds but not now.
 	scheduler.Every(5).Seconds().Run(job)
 	runtime.Goexit()
-
 }
 func (erm EurekaRegistrationManager) DeRegisterFromServiceRegistry(configs RegistrationVariables) {
 	bodyDOWN := erm.getBodyForEureka("DOWN", configs)

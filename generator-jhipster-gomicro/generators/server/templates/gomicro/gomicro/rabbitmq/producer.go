@@ -17,7 +17,6 @@ func Producer<%= rabbitmqServer %>To<%= rabbitmqClient %>() {
 		conn, err := amqp.Dial(rabbitmqUrl)
 		if err != nil {
 			logger.Errorf("Failed Initializing Broker Connection")
-			panic(err)
 		}
 		channel, err := conn.Channel()
 		if err != nil {
@@ -89,6 +88,5 @@ func Producer<%= rabbitmqServer %>To<%= rabbitmqClient %>() {
 		}
 		logger.Infof("Message Published Successfully")
 	}
-
 	scheduler.Every(25).Seconds().Run(job)
 }

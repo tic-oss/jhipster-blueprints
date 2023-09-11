@@ -21,6 +21,6 @@ func GetInstance() *mongo.Client {
 		logger.Errorf(err.Error())
 		return nil
 	}
-
+	logger.Infof("Database connected")
 	return client
 }

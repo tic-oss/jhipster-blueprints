@@ -32,8 +32,8 @@ func Setconfig() {
 		profile = os.Getenv("GO_MICRO_ACTIVE_PROFILE")
 	}
 	cfg.GO_MICRO_ACTIVE_PROFILE = profile
-	readFile(&cfg, "config/app.yaml")
-	readFile(&cfg, "config/"+profile+"-config.yaml")
+	readFile(&cfg, "resources/app.yaml")
+	readFile(&cfg, "resources/"+profile+"-config.yaml")
 	readEnv(&cfg)
 }
 

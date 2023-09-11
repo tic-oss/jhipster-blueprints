@@ -16,7 +16,6 @@ func Consumer<%= rabbitmqServer %>To<%= rabbitmqClient %> () {
 	
 	if err != nil {
 		logger.Errorf("Failed Initializing Broker Connection")
-		panic(err)
 	}
 	channel, err := conn.Channel()
 	if err != nil {
