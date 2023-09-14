@@ -1,8 +1,6 @@
-# Website
+# Running Docusaurus Documentation Locally in VSCode
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
-
-# Running Docusaurus Documentation Locally in VSCode
 
 Follow these steps to run a Docusaurus documentation site that you've cloned from GitHub on your local machine using VSCode.
 
