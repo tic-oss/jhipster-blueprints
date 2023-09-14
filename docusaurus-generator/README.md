@@ -15,8 +15,8 @@ npm link
 Run Yeoman Generator to scaffold a sample Docusaurus application
 ```
 yo docusaurus
-
-
+```
 If you wish to give custom name for your Project then run the command as
 ```
 yo docusaurus --projectName your_project_name
+```
