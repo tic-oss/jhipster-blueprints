@@ -209,7 +209,7 @@ export default class extends ServerGenerator {
           { src: 'main.go', dest: 'main.go' },
           { src: 'Dockerfile', dest: 'Dockerfile' },
           { src: 'Makefile', dest: 'Makefile' },
-          { src: 'ReadMe.md', dest: 'ReadMe.md' },
+          { src: 'README.md', dest: 'README.md' },
           { src: 'config', dest: 'config' },
           { src: 'resources', dest: 'resources' },
           { src: 'controllers', dest: 'controllers' },
