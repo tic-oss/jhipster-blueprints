@@ -6,10 +6,10 @@ module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.argument("projectName", {
+    this.option("file", {
+      description: "Path to the JSON configuration file",
       type: String,
-      required: false,
-      description: "Name of the project"
+      default: "./generator-config.json" 
     });
 
     this.option("generateDocusaurus", {
@@ -18,9 +18,21 @@ module.exports = class extends Generator {
       default: true
     });
   }
-
+  initializing() {
+    const filePath = this.options.file;
+    const configPath = path.resolve(this.contextRoot, filePath);
+  
+    if (fs.existsSync(configPath)) {
+      this.configData = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    } else {
+      this.log(`Warning: Configuration file not found at ${configPath}`);
+      this.configData = {};
+    }
+  }
+  
   writing() {
-    const projectName = this.options.projectName || "MyDocumentation"; // Default project name
+    const applicationName = this.configData.applicationName || "MyDocumentation";
+    const port = this.configData.port || "3000"
     const copyOpts = {
       globOptions: {
         ignore: []
@@ -28,7 +40,8 @@ module.exports = class extends Generator {
     };
 
     const options = {
-      projectName: projectName
+      applicationName: applicationName,
+      port:port
     };
 
     if (this.options.generateDocusaurus) {
@@ -41,7 +54,7 @@ module.exports = class extends Generator {
   _generateDocusaurus(options, copyOpts) {
     this.fs.copyTpl(
       this.templatePath(`docusaurus`), 
-      this.destinationPath(`docusaurus-${options.projectName}`),
+      this.destinationPath(`docusaurus-${options.applicationName}`),
       options,
       copyOpts
     );
@@ -51,15 +64,15 @@ module.exports = class extends Generator {
     const templateConfigContent = this.fs.read(templateConfigPath);
   
     // Perform string replacement for the project name
-    const updatedConfigContent = templateConfigContent.replace(
-      /<%= projectName %>/g,
-      options.projectName
-    );
+    const updatedConfigContent = templateConfigContent
+    .replace(/<%= applicationName %>/g,options.applicationName)
+    .replace(/<%= port %>/g, options.port);
   
     // Write the updated config to the generated directory
     const generatedConfigPath = this.destinationPath(
-      `docusaurus-${options.projectName}/docusaurus.config.js`
+      `docusaurus-${options.applicationName}/docusaurus.config.js`
     );
+    
     this.fs.write(generatedConfigPath, updatedConfigContent);
   }
   
@@ -71,7 +84,6 @@ module.exports = class extends Generator {
         "docs/Documentation/concept.md",
         "docs/Documentation/maintopic.md",
         "docs/Documentation/subfolder/subfile.md",
-        //"blog/2019-05-28-five-blog-post.md",
         "blog/2021-08-01-mdx-blog-post.mdx",
         "blog/2023-08-29-three-blog-post.md",
         "blog/2023-08-29-four-blog-post.md",
@@ -101,7 +113,7 @@ module.exports = class extends Generator {
     filesToGenerate.forEach(file => {
       this.fs.copyTpl(
         this.templatePath(`docusaurus/${file}`), // Add a forward slash here
-        this.destinationPath(`docusaurus-${options.projectName}/${file}`),
+        this.destinationPath(`docusaurus-${options.applicationName}/${file}`),
         options,
         copyOpts
       );

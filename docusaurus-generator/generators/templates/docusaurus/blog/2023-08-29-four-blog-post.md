@@ -1,5 +1,5 @@
 ---
-slug: long-blog-post
+slug: long3-blog-post
 title: My oneplusthree blog
 author: sample author
 author_title: Co-founder & CEO

@@ -1,5 +1,5 @@
 ---
-slug: long-blog-post
+slug: long4-blog-post
 title: My 8-minus-seven blog
 author: sample author
 author_title: Co-founder & CEO

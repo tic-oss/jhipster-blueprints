@@ -1,5 +1,5 @@
 ---
-slug: long-blog-post
+slug: long1-blog-post
 title: sample blog heading
 author: sample author
 author_title: Co-founder & CEO

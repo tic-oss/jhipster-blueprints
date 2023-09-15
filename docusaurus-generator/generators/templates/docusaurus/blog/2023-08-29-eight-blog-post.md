@@ -1,5 +1,5 @@
 ---
-slug: long-blog-post
+slug: long2-blog-post
 title: My 1+7 blog
 author: sample author
 author_title: Co-founder & CEO

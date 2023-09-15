@@ -1,5 +1,5 @@
 module.exports = {
-  title: '<%= projectName %>',
+  title: '<%= applicationName %>',
   tagline: 'add your tagline',
   url: 'https://example.com',
   baseUrl: '/',
@@ -55,7 +55,7 @@ module.exports = {
 
   themeConfig: {
     navbar: {
-      title: '<%= projectName %>',
+      title: '<%= applicationName %>',
       logo: {
         alt: 'company Logo',
         src: 'img/logo.png',

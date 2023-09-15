@@ -1,5 +1,5 @@
 ---
-slug: long-blog-post
+slug: long5-blog-post
 title: My even+three blog
 author: sample author
 author_title: Co-founder & CEO
