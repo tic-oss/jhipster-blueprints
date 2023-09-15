@@ -9,7 +9,7 @@ module.exports = class extends Generator {
     this.option("file", {
       description: "Path to the JSON configuration file",
       type: String,
-      default: "./generator-config.json" 
+      // default: "./generator-config.json" 
     });
 
     this.option("generateDocusaurus", {
@@ -59,11 +59,9 @@ module.exports = class extends Generator {
       copyOpts
     );
   
-    // Read the template docusaurus.config.js file
     const templateConfigPath = this.templatePath("docusaurus/docusaurus.config.js");
     const templateConfigContent = this.fs.read(templateConfigPath);
-  
-    // Perform string replacement for the project name
+
     const updatedConfigContent = templateConfigContent
     .replace(/<%= applicationName %>/g,options.applicationName)
     .replace(/<%= serverPort %>/g, options.serverPort);
