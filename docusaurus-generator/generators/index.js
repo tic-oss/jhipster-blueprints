@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Generator = require("yeoman-generator");
 
-module.exserverPorts = class extends Generator {
+module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
