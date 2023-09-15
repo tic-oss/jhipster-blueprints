@@ -3,8 +3,6 @@
 ## prerequisites
 * [Node.js](https://nodejs.org/en/download/)
 * [Yeoman](https://yeoman.io/learning/index.html)
-* [Maven](https://maven.apache.org/download.cgi)
-* JDK(17)
 ### Instructions
 
 Install project dependencies and symlink a global module to the local file.
@@ -18,5 +16,12 @@ yo docusaurus
 ```
 If you wish to give custom name for your Project then run the command as
 ```
-yo docusaurus --projectName your_project_name
+yo docusaurus --file inputfile.json
+```
+For giving input add your .json file to the generator directory. Example:-
+```
+{
+    "applicationName": "Test_gen111",
+    "serverPort": 5000
+}
 ```
