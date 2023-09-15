@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Generator = require("yeoman-generator");
 
-module.exports = class extends Generator {
+module.exserverPorts = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
@@ -32,7 +32,7 @@ module.exports = class extends Generator {
   
   writing() {
     const applicationName = this.configData.applicationName || "MyDocumentation";
-    const port = this.configData.port || "3000"
+    const serverPort = this.configData.serverPort || "3000"
     const copyOpts = {
       globOptions: {
         ignore: []
@@ -41,7 +41,7 @@ module.exports = class extends Generator {
 
     const options = {
       applicationName: applicationName,
-      port:port
+      serverPort:serverPort
     };
 
     if (this.options.generateDocusaurus) {
@@ -66,7 +66,7 @@ module.exports = class extends Generator {
     // Perform string replacement for the project name
     const updatedConfigContent = templateConfigContent
     .replace(/<%= applicationName %>/g,options.applicationName)
-    .replace(/<%= port %>/g, options.port);
+    .replace(/<%= serverPort %>/g, options.serverPort);
   
     // Write the updated config to the generated directory
     const generatedConfigPath = this.destinationPath(
