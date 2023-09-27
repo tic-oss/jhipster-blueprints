@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	<%_ if (postgresql||mongodb){  _%>
 	auth "<%= packageName %>/auth"
+	<%_ } _%>
 	"github.com/gorilla/mux"
 	"net/http"
 	"encoding/json"
@@ -14,7 +16,6 @@ import (
 	<%_ if (restClient){  _%>
 	"github.com/micro/micro/v3/service/logger"
 	<%_ } _%>
-
 )
 
 type EventController struct {
