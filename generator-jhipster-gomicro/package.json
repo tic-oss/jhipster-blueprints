@@ -45,7 +45,7 @@
     "prettier": "2.8.7",
     "prettier-plugin-java": "",
     "prettier-plugin-packagejson": "",
-    "yeoman-test": "7.4.0"
+    "yeoman-test": "8.0.0"
   },
   "engines": {
     "node": ">=16.13.0"
